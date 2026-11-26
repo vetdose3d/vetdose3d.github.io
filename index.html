@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VetDose 3D — Veterinary Pharmacy Study &amp; Board-Prep Simulation | vetdose3d.com</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js"></script>
+  <!-- Optional: Google Identity Services SDK for Live Google OAuth -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root {
+      --bg-cream: #f8f7f2;
+      --navy: #16325c;
+      --blue-mid: #2b6cb0;
+      --blue-light: #4a90e2;
+      --accent: #0ea5e9;
+      --gold: #f59e0b;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg-cream); color: var(--text-main); line-height: 1.5; }
+
+    /* Top Educational-Only Compliance Strip */
+    .edu-disclaimer-bar {
+      background: #7f1d1d;
+      color: #fef2f2;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      letter-spacing: 0.2px;
+      border-bottom: 1px solid #991b1b;
+    }
+    .edu-disclaimer-bar span {
+      background: #fef2f2;
+      color: #7f1d1d;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+
+    /* Top Navigation Banner */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(22, 50, 92, 0.06);
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .brand-logo-wrap { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-title { font-size: 1.45rem; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+    .brand-title span.blue-3d { color: var(--blue-light); }
+    .brand-sub { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; display: block; margin-top: -3px; }
+    .domain-pill {
+      background: #eff6ff;
+      color: var(--blue-mid);
+      border: 1px solid #bfdbfe;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .nav-btn:hover { background: #eff6ff; color: var(--blue-mid); }
+    .nav-btn.active { background: var(--navy); color: #ffffff; }
+
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn-primary:hover { background: var(--blue-mid); }
+
+    .btn-google-nav {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1.5px solid #cbd5e1;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.86rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: 0.15s;
+    }
+    .btn-google-nav:hover { background: #f8fafc; border-color: #94a3b8; }
+
+    .user-pill {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: var(--navy);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .plan-badge {
+      background: var(--navy);
+      color: #38bdf8;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .view-section { display: none; }
+    .view-section.active { display: block; }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, #0f2547 0%, #1e4682 55%, #2b6cb0 100%);
+      color: #ffffff;
+      padding: 42px 28px;
+    }
+    .hero-grid {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    @media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-logo-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 12px 16px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+    .hero-edu-tag {
+      display: inline-block;
+      background: rgba(254, 226, 226, 0.16);
+      border: 1px solid rgba(252, 165, 165, 0.5);
+      color: #fecaca;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .hero-h1 { font-size: 2.3rem; font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+    .hero-p { font-size: 1.02rem; color: #dbeafe; margin-bottom: 22px; }
+    .hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-hero-gold {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn-hero-gold:hover { background: #fbbf24; }
+    .btn-hero-glass {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      padding: 13px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn-hero-glass:hover { background: rgba(255, 255, 255, 0.2); }
+
+    /* Revolving Interactive Showcase */
+    .showcase-card {
+      background: rgba(11, 19, 43, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+    .showcase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+    .showcase-viewer {
+      width: 100%;
+      height: 310px;
+      background: radial-gradient(circle, #1e3a6e 0%, #091124 100%);
+      border-radius: 12px;
+    }
+    .showcase-dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .s-dot {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+    }
+    .s-dot.active { background: #38bdf8; color: #0f172a; }
+
+    /* Home Containers */
+    .container { max-width: 1220px; margin: 0 auto; padding: 44px 24px; }
+    .section-divider { border-top: 1px solid #e2e8f0; }
+
+    /* Species Category Directory on Home */
+    .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 24px; }
+    @media (max-width: 960px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .cat-grid { grid-template-columns: 1fr; } }
+
+    .cat-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+    .cat-card h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: 6px; }
+    .cat-sp-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--navy);
+      cursor: pointer;
+    }
+    .cat-sp-btn:hover { background: #eff6ff; border-color: var(--blue-mid); }
+    .tier-tag-free { background: #dcfce7; color: #166534; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+    .tier-tag-pro { background: #e0f2fe; color: #075985; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+    /* Membership Pricing Grid */
+    .pricing-section { background: #ffffff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+    @media (max-width: 980px) { .pricing-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+    .price-card {
+      background: var(--bg-cream);
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .price-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08); }
+    .price-card.featured {
+      background: #0f2547;
+      color: #ffffff;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 16px 34px rgba(15, 37, 71, 0.22);
+    }
+    .price-card.university {
+      background: #f0f9ff;
+      border: 2px solid #0284c7;
+    }
+    .popular-ribbon {
+      position: absolute;
+      top: -12px;
+      right: 18px;
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .price-tier-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; }
+    .price-amount { font-size: 2.15rem; font-weight: 900; margin: 8px 0 2px; letter-spacing: -0.5px; }
+    .price-amount span { font-size: 0.88rem; font-weight: 600; opacity: 0.8; }
+    .price-sub { font-size: 0.8rem; opacity: 0.85; margin-bottom: 14px; }
+    .price-features { list-style: none; margin: 12px 0 20px; display: flex; flex-direction: column; gap: 8px; font-size: 0.86rem; }
+    .price-features li { display: flex; align-items: flex-start; gap: 8px; }
+    .btn-plan {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border: none;
+      transition: 0.15s;
+    }
+    .btn-plan-navy { background: var(--navy); color: #ffffff; }
+    .btn-plan-navy:hover { background: var(--blue-mid); }
+    .btn-plan-gold { background: #f59e0b; color: #0f172a; }
+    .btn-plan-gold:hover { background: #fbbf24; }
+    .btn-plan-outline { background: #ffffff; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-plan-outline:hover { background: #eff6ff; }
+
+    /* Contact Section on Home */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 28px;
+      margin-top: 24px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    }
+    @media (max-width: 820px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+    .contact-input:focus { outline: none; border-color: var(--blue-mid); }
+
+    /* Modals (Educational Gate, Auth/Google Login, Stripe Checkout) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 17, 36, 0.78);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #ffffff;
+      color: var(--text-main);
+      max-width: 470px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: #f1f5f9;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-google-full {
+      width: 100%;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1.5px solid #cbd5e1;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0;
+      transition: 0.15s;
+    }
+    .btn-google-full:hover { background: #f8fafc; border-color: #64748b; }
+
+    /* 3D Simulator Workspace */
+    .lab-toolbar {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .cat-filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .species-select {
+      background: #1e293b;
+      color: #fff;
+      border: 1.5px solid #38bdf8;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+    .lab-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .lab-tab {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lab-tab.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+    .btn-download-quick {
+      background: #059669;
+      color: #ffffff;
+      border: 1px solid #34d399;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .btn-download-quick:hover { background: #047857; }
+
+    .lab-workspace { display: grid; grid-template-columns: 1.25fr 1fr; min-height: calc(100vh - 165px); background: #0b132b; }
+    @media (max-width: 960px) { .lab-workspace { grid-template-columns: 1fr; } }
+
+    .viewer-stage { position: relative; background: radial-gradient(circle at center, #1e3a6e 0%, #070d1d 100%); min-height: 490px; }
+    #mainVetViewer { width: 100%; height: 100%; min-height: 490px; }
+    .model-status-pill {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .Hotspot {
+      background: rgba(56, 189, 248, 0.95);
+      border: 2px solid #ffffff;
+      border-radius: 999px;
+      color: #0f172a;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s;
+    }
+    .Hotspot:hover { transform: scale(1.16); background: #fff; }
+    .Hotspot.correct { background: #22c55e; color: #fff; }
+    .Hotspot.wrong { background: #ef4444; color: #fff; }
+    .HotspotAnnotation { pointer-events: none; white-space: nowrap; }
+    .viewer-overlay-bar {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Right Study Control Panel */
+    .clinical-sidebar {
+      background: #111827;
+      color: #f8fafc;
+      padding: 18px;
+      border-left: 1px solid #1f2937;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      max-height: calc(100vh - 155px);
+    }
+    .clin-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
+
+    /* Study Deck Customizer Bar */
+    .deck-controls {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.82rem;
+    }
+    .deck-select {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #475569;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .deck-btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #38bdf8;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .deck-btn:hover { background: #0284c7; }
+
+    /* Study Supply Tray */
+    .supply-tray { background: #0f172a; border: 1.5px solid #38bdf8; border-radius: 12px; padding: 12px; }
+    .tray-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #38bdf8;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .tray-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    @media (max-width: 520px) { .tray-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .tray-item {
+      background: #1e293b;
+      border: 1.5px solid #475569;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 8px 4px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 700;
+      transition: 0.15s;
+    }
+    .tray-item:hover { border-color: #38bdf8; }
+    .tray-item.selected {
+      background: #0284c7;
+      border-color: #7dd3fc;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.45);
+    }
+    .tray-icon { font-size: 1.25rem; display: block; margin-bottom: 2px; }
+
+    .opt-btn {
+      width: 100%;
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      margin-top: 8px;
+      font-size: 0.88rem;
+    }
+    .opt-btn:hover { border-color: #38bdf8; }
+    .contra-alert {
+      background: rgba(220, 38, 38, 0.15);
+      border-left: 3px solid #ef4444;
+      padding: 9px 11px;
+      border-radius: 6px;
+      font-size: 0.83rem;
+      color: #fecaca;
+      margin-top: 10px;
+    }
+    .feedback-box { padding: 12px; border-radius: 8px; font-size: 0.88rem; display: none; }
+    .feedback-box.show { display: block; }
+    .feedback-box.ok { background: rgba(22, 163, 74, 0.2); border: 1px solid #22c55e; color: #bbf7d0; }
+    .feedback-box.err { background: rgba(220, 38, 38, 0.2); border: 1px solid #ef4444; color: #fecaca; }
+
+    .comp-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 10px; }
+    .comp-table th, .comp-table td { border: 1px solid #334155; padding: 8px; text-align: left; }
+    .comp-table th { background: #0f172a; color: #38bdf8; }
+
+    /* Drug Picker List inside Sidebar */
+    .drug-picker-list {
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 10px 0;
+      padding-right: 4px;
+    }
+    .drug-pick-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    .drug-pick-row:hover { border-color: #38bdf8; }
+
+    footer {
+      background: #0b132b;
+      color: #94a3b8;
+      padding: 26px 22px;
+      text-align: center;
+      font-size: 0.82rem;
+      border-top: 1px solid #1e293b;
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+  <!-- MANDATORY STUDY-ONLY COMPLIANCE BANNER -->
+  <div class="edu-disclaimer-bar">
+    <span>Study Use Only</span> VetDose 3D is an educational board-prep simulation tool ONLY. NOT intended for clinical diagnosis, patient prescribing, or veterinary medical care.
+  </div>
+
+  <!-- TOP NAVIGATION BANNER -->
+  <nav class="navbar">
+    <div class="brand-lockup" onclick="switchView('home')">
+      <div id="navLogoContainer" class="brand-logo-wrap"></div>
+      <div>
+        <div class="brand-title">VetDose <span class="blue-3d">3D</span> <span class="domain-pill">vetdose3d.com</span></div>
+        <span class="brand-sub">Veterinary Pharmacy Study &amp; Board-Prep Simulation</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="nav-home" onclick="switchView('home')">Home</button>
+      <button class="nav-btn" onclick="jumpToHomeSection('pricingSection')">Memberships</button>
+      <button class="nav-btn" onclick="jumpToHomeSection('contactSection')">Contact</button>
+      <button class="nav-btn" id="nav-lab" onclick="openLab('tray', appState.species)">3D Study Lab</button>
+      <div id="authHeaderSlot"></div>
+    </div>
+  </nav>
+
+  <!-- ==================== 1. HOME PAGE VIEW ==================== -->
+  <section id="view-home" class="view-section active">
+    <div class="hero-banner">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-logo-banner">
+            <div id="heroLogoContainer" class="brand-logo-wrap"></div>
+            <div>
+              <div style="font-weight:800; font-size:1.15rem;">VetDose 3D Academic Study Platform</div>
+              <div style="font-size:0.82rem; color: #bae6fd;">NAPLEX • NAVLE • VTNE Veterinary Pharmacology Exam Prep</div>
+            </div>
+          </div>
+          <div class="hero-edu-tag">⚠️ FOR ACADEMIC &amp; EXAM STUDY USE ONLY — NOT FOR CLINICAL PATIENT CARE</div>
+          <h1 class="hero-h1">Master Multi-Species Veterinary Pharmacology in Interactive 3D</h1>
+          <p class="hero-p">
+            Study 210+ board-aligned medications per species across 7 animals. Customize your study deck size, practice dosage placement on 3D anatomical landmarks, drill species contraindications, and export printable study guides.
+          </p>
+          <div class="hero-cta-row">
+            <button class="btn-hero-gold" onclick="openLab('tray', 'dog')">Start Free 3D Study Demo →</button>
+            <button class="btn-hero-glass" onclick="jumpToHomeSection('pricingSection')">View Student &amp; University Plans</button>
+          </div>
+        </div>
+
+        <!-- Revolving Interactive 3D Showcase -->
+        <div class="showcase-card">
+          <div class="showcase-header">
+            <strong id="showcaseSpeciesTitle">🐶 Canine (Dog) • Companion Animals</strong>
+            <span style="color:#38bdf8; font-weight:700;">Study Preview • Drag to Rotate</span>
+          </div>
+          <model-viewer id="heroShowcaseViewer"
+            class="showcase-viewer"
+            src="models/dog.glb"
+            auto-rotate
+            rotation-per-second="24deg"
+            camera-controls
+            camera-orbit="45deg 75deg auto"
+            field-of-view="auto"
+            bounds="tight"
+            tone-mapping="neutral"
+            shadow-intensity="1">
+          </model-viewer>
+          <div class="showcase-dots" id="showcaseDots"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organized Species Categories & Subcategories Directory -->
+    <div class="container">
+      <h2 style="text-align:center; font-size:1.9rem; font-weight:800; color:var(--navy);">7 Study Species Organized by Veterinary Practice Category</h2>
+      <p style="text-align:center; color:var(--text-muted); max-width:740px; margin:6px auto 0;">
+        Free accounts include Canine (Dog) starter study access. Upgrade to any Student, Lifetime, or University plan to unlock all 7 species and 1,470+ interactive study scenarios.
+      </p>
+      <div class="cat-grid">
+        <div class="cat-card">
+          <h3>🐾 Companion Animals</h3>
+          <p style="font-size: 0.84rem; color:var(--text-muted);">Small animal therapeutics, ophthalmic/otic instillation &amp; hepatic metabolism traps.</p>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'dog')">
+            <span>🐶 Canine (Dog)</span>
+            <span class="tier-tag-free">FREE STARTER</span>
+          </button>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'cat')">
+            <span>🐱 Feline (Cat)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+        </div>
+
+        <div class="cat-card">
+          <h3>🐴 Equine Medicine</h3>
+          <p style="font-size:0.84rem; color:var(--text-muted);">External jugular groove IV, cervical triangle IM &amp; hindgut antibiotic sensitivities.</p>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'horse')">
+            <span>🐴 Equine (Horse)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+        </div>
+
+        <div class="cat-card">
+          <h3>🐄 Food &amp; Production Animals</h3>
+          <p style="font-size: 0.84rem; color:var(--text-muted);">BQA/PQA neck triangle rules, intramammary infusions &amp; FARAD withdrawal rules.</p>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'cow')">
+            <span>🐄 Bovine (Cow)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'sheep')">
+            <span>🐑 Ovine (Sheep)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'pig')">
+            <span>🐖 Porcine (Pig)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+        </div>
+
+        <div class="cat-card">
+          <h3>🐔 Avian &amp; Poultry</h3>
+          <p style="font-size:0.84rem; color:var(--text-muted);">Pectoral IM injections (avoiding renal portal system), basilic wing vein IV &amp; crop dosing.</p>
+          <button class="cat-sp-btn" onclick="openLab('tray', 'chicken')">
+            <span>🐔 Avian (Chicken)</span>
+            <span class="tier-tag-pro">PRO • 210+</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MEMBERSHIP & PRICING SECTION ==================== -->
+    <div id="pricingSection" class="pricing-section">
+      <div class="container">
+        <div style="text-align:center; max-width:760px; margin:0 auto;">
+          <span style="background:#eff6ff; color:var(--blue-mid); border:1px solid #bfdbfe; padding:4px 12px; border-radius:999px; font-size:0.78rem; font-weight:800;">
+            SECURE STRIPE CHECKOUT • LINKED TO YOUR GOOGLE ACCOUNT
+          </span>
+          <h2 style="font-size:2rem; font-weight:800; color:var(--navy); margin-top:10px;">Flexible Study Memberships for Every Exam Timeline</h2>
+          <p style="color:var(--text-muted); margin-top:6px;">
+            Start free or unlock full 7-species board-prep access for a single rotation, a 90-day exam sprint, a full academic year, lifetime reference, or an entire university cohort.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- 1. FREE TIER -->
+          <div class="price-card">
+            <div>
+              <div class="price-tier-name" style="color:var(--navy);">Free Starter</div>
+              <div class="price-amount" style="color:var(--navy);">$0 <span>/ forever</span></div>
+              <div class="price-sub">Explore the 3D simulation engine with no credit card</div>
+              <ul class="price-features">
+                <li>✅ <strong>Canine (Dog)</strong> 3D anatomical model</li>
+                <li>✅ 5 high-yield starter medications per session</li>
+                <li>✅ Interactive 3D landmark inspection</li>
+                <li>✅ Sample Contraindications &amp; Interactions quiz</li>
+                <li>❌ Other 6 species (Cat, Horse, Cow, Sheep, Pig, Chicken)</li>
+                <li>❌ Full 210+ drug decks &amp; printable study guides</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-outline" onclick="selectMembershipPlan('free', 'Free Starter', '$0')">Start Studying Free</button>
+          </div>
+
+          <!-- 2. MONTHLY TIER -->
+          <div class="price-card">
+            <div>
+              <div class="price-tier-name" style="color:var(--navy);">Monthly Study Pass</div>
+              <div class="price-amount" style="color:var(--navy);">$19.99 <span>/ month</span></div>
+              <div class="price-sub">Flexible month-to-month rotation prep • Cancel anytime</div>
+              <ul class="price-features">
+                <li>✅ <strong>All 7 Species</strong> unlocked in full interactive 3D</li>
+                <li>✅ Full <strong>210+ drugs per species</strong> (1,470+ study cases)</li>
+                <li>✅ Custom Medication Picker &amp; deck size builder</li>
+                <li>✅ Unlimited Contraindications &amp; Interactions quizzes</li>
+                <li>✅ Downloadable printable study guides (.txt)</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-navy" onclick="selectMembershipPlan('monthly', 'Monthly Study Pass', '$19.99/mo')">Choose Monthly</button>
+          </div>
+
+          <!-- 3. 90-DAY EXAM SPRINT (MOST POPULAR) -->
+          <div class="price-card featured">
+            <div class="popular-ribbon">Most Popular for Boards</div>
+            <div>
+              <div class="price-tier-name" style="color:#38bdf8;">90-Day Exam Sprint</div>
+              <div class="price-amount">$49.99 <span>/ 90 days</span></div>
+              <div class="price-sub" style="color:#bae6fd;">One-time payment ($0.55/day) • Ideal for NAPLEX / NAVLE / VTNE</div>
+              <ul class="price-features">
+                <li>✅ Everything in Monthly Study Pass for 90 full days</li>
+                <li>✅ <strong>All 7 Species</strong> + full 210+ drug formularies</li>
+                <li>✅ Custom deck builder (5, 10, 25, 50, 100, or All drugs)</li>
+                <li>✅ Cross-Species Pharmacology Trap Matrix</li>
+                <li>✅ Unlimited printable species &amp; custom deck exports</li>
+                <li>✅ No auto-renewal stress after your exam date</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-gold" onclick="selectMembershipPlan('90day', '90-Day Exam Sprint', '$49.99 (90 Days)')">Get 90-Day Access</button>
+          </div>
+
+          <!-- 4. YEARLY SCHOLAR TIER -->
+          <div class="price-card">
+            <div>
+              <div class="price-tier-name" style="color:var(--navy);">Yearly Scholar</div>
+              <div class="price-amount" style="color:var(--navy);">$119.99 <span>/ year</span></div>
+              <div class="price-sub">Save 50% vs. monthly ($10.00/mo billed annually)</div>
+              <ul class="price-features">
+                <li>✅ Full 365-day access across all didactic &amp; clinical rotations</li>
+                <li>✅ All 7 Species + 1,470+ interactive study scenarios</li>
+                <li>✅ Custom deck builder &amp; unlimited study guide downloads</li>
+                <li>✅ Priority inclusion of newly added board drugs</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-navy" onclick="selectMembershipPlan('yearly', 'Yearly Scholar', '$119.99/year')">Choose Yearly Plan</button>
+          </div>
+
+          <!-- 5. LIFETIME ALL-ACCESS -->
+          <div class="price-card">
+            <div>
+              <div class="price-tier-name" style="color:var(--navy);">Lifetime All-Access</div>
+              <div class="price-amount" style="color:var(--navy);">$249.99 <span>one-time</span></div>
+              <div class="price-sub">Pay once — own VetDose 3D forever</div>
+              <ul class="price-features">
+                <li>✅ Permanent, never-expiring access to VetDose 3D</li>
+                <li>✅ All 7 Species &amp; all future species expansions included</li>
+                <li>✅ Unlimited custom decks, quizzes, and study guide exports</li>
+                <li>✅ Ideal from 1st-year pharmacy/vet school through licensing</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-navy" onclick="selectMembershipPlan('lifetime', 'Lifetime All-Access', '$249.99 one-time')">Unlock Lifetime Access</button>
+          </div>
+
+          <!-- 6. UNIVERSITY / SCHOOL INSTITUTIONAL LICENSE -->
+          <div class="price-card university">
+            <div>
+              <div class="price-tier-name" style="color:#0369a1;">University &amp; School License</div>
+              <div class="price-amount" style="color:var(--navy);">$1,499 <span>/ year &amp; up</span></div>
+              <div class="price-sub" style="color:#0369a1; font-weight:600;">Campus-wide license for Colleges of Pharmacy &amp; Vet Med</div>
+              <ul class="price-features">
+                <li>✅ <strong>Entire School / Cohort Access</strong> (100 to 500+ student seats)</li>
+                <li>✅ Automatic <strong>@university.edu Google Workspace</strong> domain unlock</li>
+                <li>✅ Faculty &amp; instructor presentation accounts included</li>
+                <li>✅ Custom curriculum drug decks &amp; invoice/PO billing supported</li>
+              </ul>
+            </div>
+            <button class="btn-plan btn-plan-navy" style="background:#0284c7;" onclick="openUniversityInquiry()">Request School License</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CONTACT TAB / SECTION ==================== -->
+    <div id="contactSection" class="container">
+      <div style="text-align:center; max-width:700px; margin:0 auto;">
+        <h2 style="font-size:1.9rem; font-weight:800; color:var(--navy);">Contact VetDose 3D</h2>
+        <p style="color:var(--text-muted); margin-top:6px;">
+          Questions about student memberships, Google account linking, Stripe billing, or University site licenses? Reach out directly to our team.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <h3 style="color:var(--navy); font-size:1.2rem; margin-bottom:10px;">Official Support &amp; Institutional Desk</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:16px;">
+            We respond to all student, faculty, and university licensing inquiries within 1 business day.
+          </p>
+
+          <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:12px; padding:16px; margin-bottom:16px;">
+            <div style="font-size:0.76rem; font-weight:800; color:var(--blue-mid); text-transform:uppercase;">Company Email</div>
+            <div style="font-size:1.15rem; font-weight:800; color:var(--navy); margin:4px 0;">
+              <a href="mailto:vetdose3D@gmail.com" style="color:var(--navy); text-decoration:none;">vetdose3D@gmail.com</a>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+              <a href="mailto:vetdose3D@gmail.com?subject=VetDose%203D%20Inquiry" class="btn-primary" style="text-decoration:none; font-size:0.82rem;">✉️ Email Us Directly</a>
+              <button class="btn-google-nav" style="font-size:0.82rem;" onclick="copyCompanyEmail()">📋 Copy Email</button>
+            </div>
+            <div id="copyEmailStatus" style="font-size:0.78rem; color:var(--success); font-weight:700; margin-top:6px;"></div>
+          </div>
+
+          <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:12px; font-size:0.82rem; color:#7f1d1d;">
+            <strong>Educational Reminder:</strong> VetDose 3D provides academic board-preparation simulations only and cannot provide clinical veterinary medical advice or patient dosing recommendations.
+          </div>
+        </div>
+
+        <form onsubmit="submitContactForm(event)">
+          <label style="font-size:0.84rem; font-weight:700; color:var(--navy);">Your Name</label>
+          <input type="text" id="contactName" class="contact-input" placeholder="e.g., Jordan Taylor, PharmD Candidate" required />
+
+          <label style="font-size:0.84rem; font-weight:700; color:var(--navy);">Your Email (or .edu School Email)</label>
+          <input type="email" id="contactEmail" class="contact-input" placeholder="you@university.edu" required />
+
+          <label style="font-size:0.84rem; font-weight:700; color:var(--navy);">Inquiry Topic</label>
+          <select id="contactTopic" class="contact-input">
+            <option value="Student Membership / Stripe Billing">Student Membership / Stripe Billing</option>
+            <option value="University / School Institutional License">University / School Institutional License</option>
+            <option value="Google Account Sign-In Support">Google Account Sign-In Support</option>
+            <option value="Pharmacology Study Content Feedback">Pharmacology Study Content Feedback</option>
+          </select>
+
+          <label style="font-size:0.84rem; font-weight:700; color:var(--navy);">Message</label>
+          <textarea id="contactMessage" class="contact-input" rows="4" placeholder="Tell us how we can help (for University licenses, include estimated student cohort size)..." required></textarea>
+
+          <button type="submit" class="btn-plan btn-plan-navy">Send Message to vetdose3D@gmail.com</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. 3D STUDY SIMULATION LAB VIEW ==================== -->
+  <section id="view-lab" class="view-section">
+    <div class="lab-toolbar">
+      <div class="cat-filter-row">
+        <select id="labCategorySelect" class="species-select" onchange="filterSpeciesByCategory(this.value)" title="Filter by Animal Category">
+          <option value="all">All Categories (7 Species)</option>
+          <option value="companion">🐾 Companion Animals (Dog, Cat)</option>
+          <option value="equine">🐴 Equine (Horse)</option>
+          <option value="food">🐄 Food Animals (Cow, Sheep, Pig)</option>
+          <option value="avian">🐔 Avian (Chicken)</option>
+        </select>
+        <select id="labSpeciesSelect" class="species-select" onchange="loadLabSpecies(this.value)">
+          <option value="dog">🐶 Canine (Dog)</option>
+          <option value="cat">🐱 Feline (Cat)</option>
+          <option value="horse">🐴 Equine (Horse)</option>
+          <option value="cow">🐄 Bovine (Cow)</option>
+          <option value="sheep">🐑 Ovine (Sheep)</option>
+          <option value="pig">🐖 Porcine (Pig)</option>
+          <option value="chicken">🐔 Avian (Chicken)</option>
+        </select>
+      </div>
+
+      <div class="lab-tabs">
+        <button class="lab-tab active" data-tab="tray" onclick="setLabMode('tray', this)">💉 Study Tray &amp; 3D</button>
+        <button class="lab-tab" data-tab="picker" onclick="setLabMode('picker', this)">📋 Choose Medications &amp; Count</button>
+        <button class="lab-tab" data-tab="contra" onclick="setLabMode('contra', this)">⚠️ Contraindications Quiz</button>
+        <button class="lab-tab" data-tab="inter" onclick="setLabMode('inter', this)">🔄 Interactions Quiz</button>
+        <button class="lab-tab" data-tab="explore" onclick="setLabMode('explore', this)">📍 3D Anatomy</button>
+        <button class="lab-tab" data-tab="compare" onclick="setLabMode('compare', this)">⚖️ Species Traps</button>
+        <button class="lab-tab" data-tab="guides" onclick="setLabMode('guides', this)">📥 Study Guides</button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap:10px;">
+        <button class="btn-download-quick" id="toolbarQuickDownloadBtn" onclick="downloadStudyGuide(appState.species, false)" title="Download study guide for current species">
+          📥 Download Study Guide
+        </button>
+        <div style="font-weight:800; color: #4ade80; font-size:0.9rem;">
+          Score: <span id="labScore">0</span> / <span id="labTotal">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-workspace">
+      <div class="viewer-stage">
+        <div class="model-status-pill" id="modelStatusPill">3D Study Model Ready • Drag to Rotate 360°</div>
+        <model-viewer id="mainVetViewer"
+          src="models/dog.glb"
+          camera-controls
+          camera-orbit="45deg 75deg auto"
+          field-of-view="auto"
+          bounds="tight"
+          auto-rotate-delay="3000"
+          interaction-prompt="auto"
+          tone-mapping="neutral"
+          shadow-intensity="1"
+          shadow-softness="1">
+        </model-viewer>
+        <div class="viewer-overlay-bar">
+          <span id="viewerInstruction">Study Mode Only • Step 1: Choose a dosage form in the Study Tray • Step 2: Click the matching landmark pin.</span>
+          <button onclick="resetViewerCamera()" style="background: #1e293b; color: #38bdf8; border:1px solid #38bdf8; padding:3px 10px; border-radius: 6px; cursor:pointer; font-weight:700; font-size:0.75rem;">
+            Reset 3D View
+          </button>
+        </div>
+      </div>
+      <aside class="clinical-sidebar" id="labSidebar"></aside>
+    </div>
+  </section>
+
+  <!-- ==================== MODAL 1: EDUCATIONAL USE ONLY ACKNOWLEDGMENT ==================== -->
+  <div id="eduDisclaimerModal" class="modal-backdrop">
+    <div class="modal-box" style="border-top: 6px solid #dc2626;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <span style="background:#fee2e2; color:#b91c1c; padding:6px 10px; border-radius:8px; font-weight:900; font-size:0.85rem;">⚠️ IMPORTANT NOTICE</span>
+        <h3 style="color:var(--navy); font-size:1.25rem;">Educational &amp; Study Use Only</h3>
+      </div>
+      <p style="font-size:0.92rem; color:#334155; margin-bottom:12px;">
+        Welcome to <strong>VetDose 3D (vetdose3d.com)</strong>. Before using the 3D pharmacology simulation lab, please acknowledge the following terms:
+      </p>
+      <ul style="font-size:0.86rem; color:#334155; margin-left:18px; margin-bottom:16px; display:flex; flex-direction:column; gap:6px;">
+        <li><strong>Not for Clinical Use:</strong> This platform is designed strictly for academic coursework and board examination preparation (NAPLEX, NAVLE, VTNE).</li>
+        <li><strong>No Medical or Prescribing Advice:</strong> Simulations and study guides must never be used to diagnose, treat, prescribe, or calculate real-world doses for animal patients.</li>
+        <li><strong>Reference Verification:</strong> Always consult official FDA/USDA product labels, Plumb's Veterinary Drug Handbook, and FARAD guidelines in actual practice.</li>
+      </ul>
+      <button class="btn-plan btn-plan-navy" onclick="acknowledgeEducationalUse()">I Understand — Enter Study Simulation</button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: GOOGLE SIGN-IN & ACCOUNT CREATION ==================== -->
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+      <div style="text-align:center;">
+        <div id="authModalLogo" style="display:inline-block; margin-bottom:6px;"></div>
+        <h3 style="font-size:1.35rem; color:var(--navy);">Sign In or Create Your Study Account</h3>
+        <p style="font-size:0.84rem; color:var(--text-muted); margin-top:4px;">
+          Link your Google account to sync your progress and unlock your Stripe membership across devices.
+        </p>
+      </div>
+
+      <!-- Google Sign-In Button -->
+      <button class="btn-google-full" onclick="handleGoogleSignInFlow()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google Account
+      </button>
+
+      <div style="text-align:center; font-size:0.78rem; color:#94a3b8; margin:8px 0;">— or sign in / register with Gmail or .edu email —</div>
+
+      <form onsubmit="handleManualAccountAuth(event)">
+        <label style="font-size:0.8rem; font-weight:700; color:var(--navy);">Full Name</label>
+        <input type="text" id="authNameInput" class="contact-input" placeholder="Alex Rivera" required />
+
+        <label style="font-size:0.8rem; font-weight:700; color:var(--navy);">Google / School Email Address</label>
+        <input type="email" id="authEmailInput" class="contact-input" placeholder="alex.rivera@gmail.com" required />
+
+        <button type="submit" class="btn-plan btn-plan-navy">Link Account &amp; Continue</button>
+      </form>
+      <p style="font-size:0.74rem; color:#64748b; text-align:center; margin-top:10px;">
+        Tip: Signing in with a whitelisted <strong>.edu</strong> university address automatically checks for active University Site Licenses.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: STRIPE CHECKOUT & UPGRADE GATE ==================== -->
+  <div id="checkoutModal" class="modal-backdrop">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+      <span style="background:#eff6ff; color:#1d4ed8; padding:3px 10px; border-radius:999px; font-size:0.74rem; font-weight:800;">
+        STRIPE SECURE MEMBERSHIP
+      </span>
+      <h3 id="checkoutPlanTitle" style="font-size:1.35rem; color:var(--navy); margin-top:8px;">Upgrade Study Plan</h3>
+      <p id="checkoutPlanSubtitle" style="font-size:0.86rem; color:var(--text-muted); margin-top:4px;"></p>
+
+      <div id="checkoutAccountSummary" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:12px; margin:14px 0; font-size:0.84rem;"></div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button id="stripeRedirectBtn" class="btn-plan btn-plan-gold" onclick="proceedToStripeCheckout()">
+          Proceed to Stripe Checkout →
+        </button>
+      </div>
+      <p style="font-size:0.74rem; color:#64748b; text-align:center; margin-top:10px;">
+        Need help with billing? Email <strong>vetdose3D@gmail.com</strong>. Remember: Study use only.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <strong>VetDose 3D (vetdose3d.com)</strong> — Veterinary Pharmacy &amp; Pharmacology Interactive Study Simulation.<br>
+    <strong>DISCLAIMER: FOR EDUCATIONAL &amp; BOARD-PREP STUDY USE ONLY (NAPLEX / NAVLE / VTNE).</strong><br>
+    This software is not a medical device and must NOT be used for clinical decision-making, diagnosis, or patient treatment. Always verify clinical dosages against Plumb's Veterinary Drug Handbook, FDA/USDA labels, and FARAD withdrawal guidelines.<br>
+    Questions or University Licensing: <a href="mailto:vetdose3D@gmail.com" style="color:#38bdf8;">vetdose3D@gmail.com</a>
+  </footer>
+
+  <!-- Merges external medications-data.js if present in the folder -->
+  <script src="medications-data.js" onerror="console.log('Using built-in 210+ NAPLEX study database per species.')"></script>
+  <script>
+    /* ============================================================================
+       STRIPE & GOOGLE OAUTH CONFIGURATION (Replace with your live keys/links)
+       ============================================================================ */
+    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com";
+
+    // Paste your Stripe Payment Links from dashboard.stripe.com/payment-links
+    const STRIPE_PAYMENT_LINKS = {
+      monthly: "https://buy.stripe.com/YOUR_MONTHLY_LINK",
+      "90day": "https://buy.stripe.com/YOUR_90DAY_LINK",
+      yearly: "https://buy.stripe.com/YOUR_YEARLY_LINK",
+      lifetime: "https://buy.stripe.com/YOUR_LIFETIME_LINK"
+    };
+
+    // Add university domains here as schools purchase institutional licenses
+    const APPROVED_UNIVERSITY_DOMAINS = ["vetdose3d.edu"];
+
+    /* Self-contained Multi-Species Circular Rx Emblem */
+    function getCleanVetLogoSVG(size, isDarkBg) {
+      const outerRing = isDarkBg ? "#38bdf8" : "#4a89c8";
+      const navy = isDarkBg ? "#ffffff" : "#12345b";
+      const fillMid = isDarkBg ? "#1e4682" : "#6ca2d8";
+      const badgeBg = isDarkBg ? "rgba(15, 37, 71, 0.75)" : "#f8f7f2";
+
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <circle cx="60" cy="60" r="55" fill="${badgeBg}" stroke="${outerRing}" stroke-width="5"/>
+          <circle cx="60" cy="60" r="48" stroke="${fillMid}" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.65"/>
+          <g transform="translate(45, 9)">
+            <path d="M5 10 C2 10 1 16 3 20 L6 19 C6 24 10 27 15 27 C20 27 24 24 24 19 L27 20 C29 16 28 10 25 10 C23 6 19 5 15 5 C11 5 7 6 5 10 Z" fill="${navy}"/>
+            <path d="M8 11 C8 8 11 7 15 7 C19 7 22 8 22 11 L22 19 C22 22 19 25 15 25 C11 25 8 22 8 19 Z" fill="${fillMid}"/>
+            <circle cx="12" cy="14" r="1.4" fill="${navy}"/>
+            <circle cx="18" cy="14" r="1.4" fill="${navy}"/>
+            <ellipse cx="15" cy="18.5" rx="2.3" ry="1.6" fill="${navy}"/>
+            <path d="M13 21 Q15 23 17 21" stroke="${navy}" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(76, 22)">
+            <path d="M4 11 L6 3 L12 8 C14 7.5 16 7.5 18 8 L24 3 L26 11 C28 14 28 19 25 22 C22 25 18 26 15 26 C12 26 8 25 5 22 C2 19 2 14 4 11 Z" fill="${fillMid}" stroke="${navy}" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="11" cy="15" r="1.3" fill="${navy}"/>
+            <circle cx="19" cy="15" r="1.3" fill="${navy}"/>
+            <polygon points="15,17.5 13.5,19.5 16.5,19.5" fill="${navy}"/>
+            <path d="M12 21 Q15 23 18 21" stroke="${navy}" stroke-width="1.2" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(73, 56)">
+            <path d="M10 6 L13 1 L16 6 C21 8 25 14 25 22 L23 32 L13 32 L12 22 L6 24 C4 24 3 21 4 18 L9 11 Z" fill="${fillMid}" stroke="${navy}" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M15 5 C20 8 23 14 23 22" stroke="${navy}" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="1.3" fill="${navy}"/>
+          </g>
+          <g transform="translate(56, 81)">
+            <path d="M6 7 C3 5 2 3 4 2 C6 3 8 5 9 6 L19 6 C20 5 22 3 24 2 C26 3 25 5 22 7 L24 10 L21 12 L20 22 C20 25 17 27 14 27 C11 27 8 25 8 22 L7 12 L4 10 Z" fill="${navy}"/>
+            <path d="M10 9 L18 9 L17 19 L11 19 Z" fill="#ffffff"/>
+            <rect x="9.5" y="19" width="9" height="6" rx="3" fill="${fillMid}"/>
+            <circle cx="11" cy="13" r="1.2" fill="${navy}"/>
+            <circle cx="17" cy="13" r="1.2" fill="${navy}"/>
+          </g>
+          <g transform="translate(30, 81)">
+            <path d="M6 8 C4 6 6 3 10 4 C12 2 16 2 18 4 C22 3 24 6 22 8 L25 11 L21 13 L20 21 C19 24 16 26 14 26 C12 26 9 24 8 21 L7 13 L3 11 Z" fill="${fillMid}" stroke="${navy}" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="11" cy="14" r="1.2" fill="${navy}"/>
+            <circle cx="17" cy="14" r="1.2" fill="${navy}"/>
+            <path d="M12 20 L14 21.5 L16 20" stroke="${navy}" stroke-width="1.3" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(13, 52)">
+            <path d="M5 9 L3 4 L9 7 C11 6 15 6 17 7 L23 4 L21 9 C23 12 23 17 20 20 C17 22 9 22 6 20 C3 17 3 12 5 9 Z" fill="${fillMid}" stroke="${navy}" stroke-width="1.8" stroke-linejoin="round"/>
+            <ellipse cx="13" cy="15.5" rx="4.2" ry="3" fill="${outerRing}" stroke="${navy}" stroke-width="1.3"/>
+            <circle cx="11.6" cy="15.5" r="0.9" fill="${navy}"/>
+            <circle cx="14.4" cy="15.5" r="0.9" fill="${navy}"/>
+            <circle cx="9.5" cy="11.5" r="1.1" fill="${navy}"/>
+            <circle cx="16.5" cy="11.5" r="1.1" fill="${navy}"/>
+          </g>
+          <g transform="translate(19, 22)">
+            <path d="M12 5 C12 3 14 2 15 4 C16 2 18 3 18 5 C20 6 21 9 20 12 L24 14 L20 16 C20 20 18 24 14 25 L8 25 C8 19 9 12 12 5 Z" fill="${fillMid}" stroke="${navy}" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="17" cy="10.5" r="1.2" fill="${navy}"/>
+          </g>
+          <text x="58" y="69" text-anchor="middle" font-size="34" font-weight="900" fill="${navy}" font-family="'Segoe UI', Arial, sans-serif" letter-spacing="-1">Rx</text>
+        </svg>
+      `;
+    }
+
+    document.getElementById("navLogoContainer").innerHTML = getCleanVetLogoSVG(50, false);
+    document.getElementById("heroLogoContainer").innerHTML = getCleanVetLogoSVG(64, true);
+    document.getElementById("authModalLogo").innerHTML = getCleanVetLogoSVG(56, false);
+
+    /* ============================================================================
+       USER ACCOUNT, GOOGLE SIGN-IN & MEMBERSHIP STATE
+       ============================================================================ */
+    let userAccount = JSON.parse(localStorage.getItem("vetdose3d_user") || "null");
+    let pendingCheckoutPlan = null;
+
+    function isPaidMember() {
+      return userAccount && ["monthly", "90day", "yearly", "lifetime", "university"].includes(userAccount.plan);
+    }
+
+    function saveUserAccount(userObj) {
+      userAccount = userObj;
+      if (userObj) {
+        localStorage.setItem("vetdose3d_user", JSON.stringify(userObj));
+      } else {
+        localStorage.removeItem("vetdose3d_user");
+      }
+      renderAuthHeader();
+    }
+
+    function renderAuthHeader() {
+      const slot = document.getElementById("authHeaderSlot");
+      if (!userAccount) {
+        slot.innerHTML = `
+          <button class="btn-google-nav" onclick="openAuthModal()">
+            <svg width="15" height="15" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Sign In / Create Account
+          </button>
+        `;
+      } else {
+        const planLabels = { free: "Free", monthly: "Monthly", "90day": "90-Day Pro", yearly: "Yearly", lifetime: "Lifetime", university: "University" };
+        slot.innerHTML = `
+          <div class="user-pill">
+            <span>👤 ${userAccount.name.split(" ")[0]}</span>
+            <span class="plan-badge">${planLabels[userAccount.plan] || "Free"}</span>
+            <button onclick="signOutAccount()" style="background:none; border:none; color:#64748b; font-size:0.75rem; cursor:pointer; font-weight:700;" title="Sign Out">Sign Out</button>
+          </div>
+        `;
+      }
+    }
+
+    function openAuthModal() {
+      document.getElementById("authModal").classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function handleGoogleSignInFlow() {
+      // If real Google Client ID is configured, trigger Google Identity Services
+      if (window.google && google.accounts && !GOOGLE_CLIENT_ID.startsWith("YOUR_")) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response) => {
+            const payload = JSON.parse(atob(response.credential.split(".")[1]));
+            completeLogin(payload.name, payload.email, "google");
+          }
+        });
+        google.accounts.id.prompt();
+        return;
+      }
+      // Fallback prompt if Google OAuth Client ID hasn't been added yet
+      const email = prompt("Enter your Google account email address to link your VetDose 3D profile:", "student@gmail.com");
+      if (!email || !email.includes("@")) return;
+      const namePart = email.split("@")[0].replace(/[._]/g, " ");
+      const formattedName = namePart.replace(/\b\w/g, l => l.toUpperCase());
+      completeLogin(formattedName, email.trim(), "google");
+    }
+
+    function handleManualAccountAuth(e) {
+      e.preventDefault();
+      const name = document.getElementById("authNameInput").value.trim();
+      const email = document.getElementById("authEmailInput").value.trim();
+      completeLogin(name, email, "google-linked");
+    }
+
+    function completeLogin(name, email, provider) {
+      const domain = (email.split("@")[1] || "").toLowerCase();
+      const existingPlan = (userAccount && userAccount.email === email) ? userAccount.plan : "free";
+      const assignedPlan = APPROVED_UNIVERSITY_DOMAINS.includes(domain) ? "university" : existingPlan;
+
+      saveUserAccount({ name, email, provider, plan: assignedPlan });
+      closeModal("authModal");
+
+      if (pendingCheckoutPlan && pendingCheckoutPlan.id !== "free") {
+        openCheckoutModal(pendingCheckoutPlan.id, pendingCheckoutPlan.title, pendingCheckoutPlan.priceLabel);
+      } else if (document.getElementById("view-lab").classList.contains("active")) {
+        renderLabSidebar();
+      }
+    }
+
+    function signOutAccount() {
+      saveUserAccount(null);
+      if (document.getElementById("view-lab").classList.contains("active")) {
+        appState.species = "dog";
+        loadLabSpecies("dog");
+      }
+    }
+
+    /* ============================================================================
+       STRIPE MEMBERSHIP SELECTION & FEATURE GATING
+       ============================================================================ */
+    function selectMembershipPlan(planId, title, priceLabel) {
+      if (planId === "free") {
+        if (!userAccount) {
+          saveUserAccount({ name: "Guest Student", email: "guest@vetdose3d.com", provider: "guest", plan: "free" });
+        }
+        openLab("tray", "dog");
+        return;
+      }
+
+      pendingCheckoutPlan = { id: planId, title, priceLabel };
+      if (!userAccount || userAccount.provider === "guest") {
+        openAuthModal();
+        return;
+      }
+      openCheckoutModal(planId, title, priceLabel);
+    }
+
+    function openCheckoutModal(planId, title, priceLabel) {
+      pendingCheckoutPlan = { id: planId, title, priceLabel };
+      document.getElementById("checkoutPlanTitle").textContent = `${title} — ${priceLabel}`;
+      document.getElementById("checkoutPlanSubtitle").textContent =
+        "Your membership will be linked directly to your signed-in Google account for instant access across all 7 study species.";
+      document.getElementById("checkoutAccountSummary").innerHTML = `
+        <div><strong>Linked Account:</strong> ${userAccount.name} (${userAccount.email})</div>
+        <div style="margin-top:4px;"><strong>Selected Plan:</strong> ${title} (${priceLabel})</div>
+        <div style="margin-top:4px; color:#b91c1c; font-size:0.78rem;"><strong>Scope:</strong> Academic &amp; board-prep study use only.</div>
+      `;
+      document.getElementById("checkoutModal").classList.add("open");
+    }
+
+    function proceedToStripeCheckout() {
+      if (!pendingCheckoutPlan) return;
+      const stripeUrl = STRIPE_PAYMENT_LINKS[pendingCheckoutPlan.id];
+      if (stripeUrl && !stripeUrl.includes("YOUR_")) {
+        const prefilledUrl = `${stripeUrl}?prefilled_email=${encodeURIComponent(userAccount.email)}`;
+        window.open(prefilledUrl, "_blank");
+      } else {
+        alert(
+          `Stripe Checkout Ready!\n\nTo connect your live Stripe account:\n1. Create Payment Links in your Stripe Dashboard for Monthly ($19.99), 90-Day ($49.99), Yearly ($119.99), and Lifetime ($249.99).\n2. Paste those links into STRIPE_PAYMENT_LINKS at the top of the script.\n\nIn the meantime, click "Preview / Activate Plan Instantly" below to test the unlocked study features!`
+        );
+      }
+    }
+
+    function openUniversityInquiry() {
+      jumpToHomeSection("contactSection");
+      document.getElementById("contactTopic").value = "University / School Institutional License";
+      document.getElementById("contactMessage").focus();
+    }
+
+    function promptUpgradeForLockedFeature(featureDescription) {
+      if (!userAccount || userAccount.provider === "guest") {
+        pendingCheckoutPlan = { id: "90day", title: "90-Day Exam Sprint", priceLabel: "$49.99 (90 Days)" };
+        openAuthModal();
+      } else {
+        openCheckoutModal("90day", "90-Day Exam Sprint", "$49.99 (90 Days)");
+      }
+      document.getElementById("checkoutPlanSubtitle").textContent =
+        `Unlock ${featureDescription} plus all 7 species (1,470+ medications) and downloadable study guides.`;
+    }
+
+    /* ============================================================================
+       EDUCATIONAL DISCLAIMER GATE & CONTACT HELPERS
+       ============================================================================ */
+    function checkEducationalAcknowledgment() {
+      if (!sessionStorage.getItem("vetdose3d_edu_ack")) {
+        document.getElementById("eduDisclaimerModal").classList.add("open");
+      }
+    }
+
+    function acknowledgeEducationalUse() {
+      sessionStorage.setItem("vetdose3d_edu_ack", "true");
+      closeModal("eduDisclaimerModal");
+    }
+
+    function jumpToHomeSection(sectionId) {
+      switchView("home");
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 60);
+    }
+
+    function copyCompanyEmail() {
+      navigator.clipboard.writeText("vetdose3D@gmail.com");
+      document.getElementById("copyEmailStatus").textContent = "✅ Copied vetdose3D@gmail.com to clipboard!";
+    }
+
+    function submitContactForm(e) {
+      e.preventDefault();
+      const name = document.getElementById("contactName").value.trim();
+      const email = document.getElementById("contactEmail").value.trim();
+      const topic = document.getElementById("contactTopic").value;
+      const message = document.getElementById("contactMessage").value.trim();
+
+      const subject = encodeURIComponent(`[VetDose 3D] ${topic} — ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\nMessage:\n${message}`);
+      window.location.href = `mailto:vetdose3D@gmail.com?subject=${subject}&body=${body}`;
+    }
+
+    // ================= 1. ANATOMICAL LANDMARKS & HIGH-YIELD STUDY CASES =================
+    const speciesDatabase = {
+      dog: {
+        category: "companion",
+        categoryLabel: "Companion Animals",
+        label: "🐶 Canine (Dog)",
+        modelSrc: "models/dog.glb",
+        fallbackSrcs: ["models/Dog.glb", "dog.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "OD", label: "OD", desc: "Right Eye (Oculus Dexter) — Conjunctival sac for ophthalmic drops/ointments", pos: "0.108m 0.675m 0.390m", norm: "-0.85m -0.18m 0.49m" },
+          { slot: "hotspot-2", route: "OS", label: "OS", desc: "Left Eye (Oculus Sinister) — Conjunctival sac for ophthalmic medications", pos: "-0.045m 0.675m 0.390m", norm: "0.85m -0.18m 0.49m" },
+          { slot: "hotspot-3", route: "AD", label: "AD", desc: "Right Ear (Auris Dextra) — Vertical/horizontal ear canal (verify intact tympanum)", pos: "0.145m 0.740m 0.280m", norm: "-0.70m 0.50m 0.50m" },
+          { slot: "hotspot-4", route: "AS", label: "AS", desc: "Left Ear (Auris Sinistra) — Otic suspension/solution instillation", pos: "-0.085m 0.740m 0.280m", norm: "0.70m 0.50m 0.50m" },
+          { slot: "hotspot-5", route: "PO", label: "PO", desc: "Oral (Per Os) — Tablets, capsules, liquids, or oral syringes over base of tongue", pos: "0.030m 0.580m 0.470m", norm: "0.00m -0.60m 0.80m" },
+          { slot: "hotspot-6", route: "IN", label: "IN", desc: "Intranasal — Nares mucosal delivery (e.g., Bordetella mucosal vaccine)", pos: "0.030m 0.625m 0.500m", norm: "0.00m 0.20m 0.98m" },
+          { slot: "hotspot-7", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Loose skin over dorsal interscapular / lateral thorax", pos: "0.030m 0.660m 0.080m", norm: "0.00m 0.95m -0.30m" },
+          { slot: "hotspot-8", route: "IM", label: "IM", desc: "Intramuscular — Epaxial lumbar muscles or quadriceps/semimembranosus", pos: "0.110m 0.540m -0.250m", norm: "0.85m 0.40m -0.30m" },
+          { slot: "hotspot-9", route: "IV", label: "IV", desc: "Intravenous — Cephalic forelimb vein or lateral saphenous hindlimb vein", pos: "0.100m 0.220m 0.160m", norm: "0.40m 0.10m 0.90m" }
+        ],
+        medications: [
+          {
+            name: "Propofol", drugClass: "Short-Acting Injectable Anesthetic", route: "IV", dosageForm: "IV",
+            routeFull: "Intravenous (Cephalic or Lateral Saphenous Vein)",
+            scenario: "Study Prompt: Select the IV catheter/syringe setup from the supply tray and place Propofol on the appropriate venous landmark.",
+            rationale: "Propofol is formulated for strictly IV administration; perivascular or IM injection fails to produce surgical anesthesia.",
+            contraindicationSummary: "Contraindicated in severe hypovolemia, uncompensated shock, or severe myocardial depression; use preservative-free formulations cautiously in cats/sighthounds.",
+            contraQuestion: "Which canine condition is a primary board-exam contraindication/precaution for rapid Propofol bolus induction?",
+            contraOptions: ["Severe hypovolemia / uncompensated shock", "Mild otitis externa", "Healed tibial fracture"],
+            contraCorrect: 0, contraExplain: "Propofol causes dose-dependent vasodilation and myocardial depression, risking severe hypotension in hypovolemic patients.",
+            interQuestion: "Co-administering Midazolam or Fentanyl with Propofol produces which pharmacological effect?",
+            interOptions: ["Significant dose-sparing reduction (30-50%) in required Propofol", "Complete reversal of Propofol", "Acute nephrotoxicity"],
+            interCorrect: 0, interExplain: "Premedication with benzodiazepines or opioids reduces the required Propofol induction dose."
+          },
+          {
+            name: "Carprofen (Rimadyl)", drugClass: "COX-2 Preferential NSAID", route: "PO", dosageForm: "PO",
+            routeFull: "Oral (Chewable Tablet)",
+            scenario: "Study Prompt: Select the oral dosage form from the supply tray and place Carprofen on the PO landmark.",
+            rationale: "Oral chewable Carprofen is administered PO with food to minimize gastrointestinal irritation.",
+            contraindicationSummary: "Contraindicated with concurrent systemic corticosteroids or other NSAIDs, active GI ulceration, bleeding disorders, or uncompensated renal/hepatic disease.",
+            contraQuestion: "Which canine scenario represents an absolute contraindication for Carprofen?",
+            contraOptions: ["Dog currently receiving Prednisone or Meloxicam", "Dog with mild dental tartar", "Dog recovering from skin biopsy"],
+            contraCorrect: 0, contraExplain: "Concurrent NSAID + corticosteroid or dual-NSAID therapy dramatically increases risk of GI ulceration and perforation.",
+            interQuestion: "Combining Carprofen with Furosemide and Enalapril increases the risk of:",
+            interOptions: ["Acute kidney injury ('Triple Whammy' hemodynamic effect)", "Hypoglycemia", "Tachyarrhythmia"],
+            interCorrect: 0, interExplain: "NSAIDs block prostaglandin-mediated afferent arteriolar dilation, compounding dehydration from diuretics and ACE inhibitors."
+          },
+          {
+            name: "Ivermectin (High-Dose Demodex Protocol)", drugClass: "Macrocyclic Lactone Antiparasitic", route: "PO", dosageForm: "PO",
+            routeFull: "Oral Liquid Solution",
+            scenario: "Study Prompt: Select the oral syringe from the supply tray and place high-dose Ivermectin on the PO landmark.",
+            rationale: "While monthly heartworm preventive doses (6 mcg/kg) are safe in all breeds, high off-label doses (300-600 mcg/kg) cross the blood-brain barrier in MDR1-mutant herding breeds.",
+            contraindicationSummary: "High-dose ivermectin is CONTRAINDICATED in herding breeds (Collies, Australian Shepherds, Shelties) carrying the ABCB1-1delta (MDR1) P-glycoprotein mutation.",
+            contraQuestion: "Which genetic mutation predisposes Collies and Australian Shepherds to fatal neurotoxicity from high-dose Ivermectin?",
+            contraOptions: ["ABCB1-1delta (MDR1) P-glycoprotein efflux pump deficiency", "G6PD deficiency", "Factor VIII deficiency"],
+            contraCorrect: 0, contraExplain: "Without functional P-glycoprotein at the blood-brain barrier, ivermectin accumulates in the CNS causing ataxia, blindness, coma, and death.",
+            interQuestion: "Co-administering Ketoconazole or Spinosad with high-dose Ivermectin increases neurotoxicity risk by:",
+            interOptions: ["Inhibiting P-glycoprotein efflux transport", "Increasing gastric acidity", "Blocking renal tubular secretion"],
+            interCorrect: 0, interExplain: "Azole antifungals and spinosad inhibit P-glycoprotein, mimicking the MDR1 mutation."
+          },
+          {
+            name: "Enrofloxacin (Baytril)", drugClass: "Fluoroquinolone Antibiotic", route: "PO", dosageForm: "PO",
+            routeFull: "Oral Tablet",
+            scenario: "Study Prompt: Select the oral tablet from the supply tray and place Enrofloxacin on the PO landmark.",
+            rationale: "Concentration-dependent bactericidal fluoroquinolone; avoid in rapidly growing puppies due to articular cartilage damage.",
+            contraindicationSummary: "Contraindicated in juvenile growing dogs (small/medium breeds <8 mo, large <12 mo, giant <18 mo) due to irreversible articular cartilage erosions.",
+            contraQuestion: "Why is Enrofloxacin contraindicated in growing puppies (e.g., 5-month-old Great Dane)?",
+            contraOptions: ["Causes irreversible vesicular lesions and erosions in weight-bearing articular cartilage", "Causes permanent enamel staining", "Causes acute pancreatitis"],
+            contraCorrect: 0, contraExplain: "Fluoroquinolones chelate magnesium in immature chondrocytes, damaging developing joint cartilage.",
+            interQuestion: "Administering Enrofloxacin concurrently with Sucralfate or oral Iron/Calcium supplements results in:",
+            interOptions: ["Chelation and markedly reduced oral fluoroquinolone absorption", "Serotonin syndrome", "Severe bradycardia"],
+            interCorrect: 0, interExplain: "Polyvalent cations bind fluoroquinolones in the GI tract; separate administration by at least 2 hours."
+          },
+          {
+            name: "Bordetella bronchiseptica Intranasal Vaccine", drugClass: "Modified-Live Mucosal Bacterin", route: "IN", dosageForm: "IN",
+            routeFull: "Intranasal (Nares Applicator)",
+            scenario: "Study Prompt: Select the intranasal applicator from the tray and place the Bordetella vaccine on the IN landmark.",
+            rationale: "Intranasal Bordetella is formulated exclusively for mucosal administration; accidental SQ/IM injection causes severe hepatic necrosis.",
+            contraindicationSummary: "Strictly CONTRAINDICATED for subcutaneous or intramuscular injection (causes acute hepatic necrosis); avoid concurrent systemic antibiotics.",
+            contraQuestion: "What severe toxicity occurs if an intranasal Bordetella vaccine is accidentally injected subcutaneously?",
+            contraOptions: ["Acute hepatotoxicity / hepatic necrosis", "Ototoxicity", "Corneal ulceration"],
+            contraCorrect: 0, contraExplain: "Live-attenuated intranasal Bordetella strains cause severe liver injury if injected parenterally.",
+            interQuestion: "Which concurrent therapy neutralizes a live bacterial intranasal Bordetella vaccine?",
+            interOptions: ["Systemic antibiotics (e.g., Doxycycline or Amoxicillin-Clavulanate)", "Topical artificial tears", "Oral glucosamine"],
+            interCorrect: 0, interExplain: "Antibiotics kill the live-attenuated vaccine bacteria before mucosal IgA immunity develops."
+          }
+        ]
+      },
+      cat: {
+        category: "companion",
+        categoryLabel: "Companion Animals",
+        label: "🐱 Feline (Cat)",
+        modelSrc: "models/cat.glb",
+        fallbackSrcs: ["models/Cat.glb", "cat.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "AD", label: "AD", desc: "Right Ear (Auris Dextra) — Feline external ear canal", pos: "-0.15523m 0.38922m 0.15698m", norm: "-0.239m -0.718m 0.652m" },
+          { slot: "hotspot-2", route: "AS", label: "AS", desc: "Left Ear (Auris Sinistra) — Feline external ear canal", pos: "-0.06028m 0.38824m 0.13543m", norm: "-0.163m 0.924m 0.343m" },
+          { slot: "hotspot-3", route: "OD", label: "OD", desc: "Right Eye (Oculus Dexter) — Conjunctival sac", pos: "-0.10587m 0.34201m 0.19363m", norm: "-0.789m 0.140m 0.596m" },
+          { slot: "hotspot-4", route: "OS", label: "OS", desc: "Left Eye (Oculus Sinister) — Conjunctival sac", pos: "-0.07890m 0.34302m 0.18189m", norm: "0.698m 0.543m 0.465m" },
+          { slot: "hotspot-5", route: "PO", label: "PO", desc: "Oral (Per Os) — Capsules/tablets/liquids (always follow dry pills with water in cats!)", pos: "-0.09216m 0.31099m 0.19522m", norm: "0.130m -0.504m 0.853m" },
+          { slot: "hotspot-6", route: "IN", label: "IN", desc: "Intranasal — Nares mucosal delivery (e.g., intranasal FVRCP)", pos: "-0.08845m 0.32275m 0.20522m", norm: "0.267m -0.414m 0.869m" },
+          { slot: "hotspot-7", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Lateral flank / distal limb", pos: "-0.11646m 0.35339m 0.07110m", norm: "-0.228m 0.610m -0.758m" },
+          { slot: "hotspot-8", route: "IM", label: "IM", desc: "Intramuscular — Epaxial lumbar musculature", pos: "0.07895m 0.30696m -0.07991m", norm: "0.572m 0.763m 0.299m" },
+          { slot: "hotspot-9", route: "IM", label: "IM", desc: "Intramuscular — Caudal thigh (semimembranosus/semitendinosus)", pos: "0.02751m 0.31700m -0.13553m", norm: "-0.034m 0.944m -0.326m" },
+          { slot: "hotspot-10", route: "IV", label: "IV", desc: "Intravenous — Right cephalic vein", pos: "-0.12439m 0.09959m 0.04172m", norm: "0.387m 0.006m 0.921m" },
+          { slot: "hotspot-12", route: "IV", label: "IV", desc: "Intravenous — Left cephalic vein", pos: "-0.07676m 0.10386m 0.06863m", norm: "-0.994m -0.074m -0.075m" },
+          { slot: "hotspot-13", route: "IV", label: "IV", desc: "Intravenous — Medial saphenous vein", pos: "0.02495m 0.11728m -0.19226m", norm: "-0.388m -0.009m -0.921m" },
+          { slot: "hotspot-15", route: "IV", label: "IV", desc: "Intravenous — Medial saphenous vein (contralateral)", pos: "0.13554m 0.11023m -0.12279m", norm: "0.980m 0.180m 0.081m" }
+        ],
+        medications: [
+          {
+            name: "Doxycycline Hyclate", drugClass: "Tetracycline Antibiotic", route: "PO", dosageForm: "PO",
+            routeFull: "Oral (Liquid Suspension or Tablet Followed by Water Bolus)",
+            scenario: "Study Prompt: Select the oral dosage form from the tray and place Doxycycline on the PO landmark.",
+            rationale: "Dry doxycycline hyclate tablets lodge in the feline esophagus and cause severe ulcerative esophagitis and strictures unless followed by water or food.",
+            contraindicationSummary: "Contraindicated as dry un-chased tablets in cats (caustic esophageal strictures); avoid in pregnant queens or kittens <8 weeks.",
+            contraQuestion: "Why must dry Doxycycline hyclate tablets ALWAYS be followed by a 5-6 mL water bolus in cats?",
+            contraOptions: ["Prevents caustic pill-induced esophagitis and esophageal strictures", "Increases renal clearance", "Prevents retinal degeneration"],
+            contraCorrect: 0, contraExplain: "Cats have slow esophageal transit and dry doxycycline hyclate is highly acidic.",
+            interQuestion: "Co-administering Doxycycline with aluminum/magnesium antacids or sucralfate causes:",
+            interOptions: ["Divalent cation chelation that blocks oral Doxycycline absorption", "Severe hypertension", "Hypokalemia"],
+            interCorrect: 0, interExplain: "Separate tetracyclines from polyvalent cations by at least 2 hours."
+          },
+          {
+            name: "Enrofloxacin (Baytril)", drugClass: "Fluoroquinolone Antibiotic", route: "PO", dosageForm: "PO",
+            routeFull: "Oral (Dose-Capped <= 5 mg/kg/day)",
+            scenario: "Study Prompt: Select the oral dosage form from the tray and place Enrofloxacin on the PO landmark.",
+            rationale: "Cats carry a species-specific ABCG2 transporter variant at the blood-retinal barrier; exceeding 5 mg/kg/day causes acute blindness.",
+            contraindicationSummary: "CONTRAINDICATED at doses >5 mg/kg/day in cats due to acute irreversible retinal degeneration and blindness.",
+            contraQuestion: "What irreversible toxicity occurs in cats given Enrofloxacin above 5 mg/kg/day?",
+            contraOptions: ["Acute retinal degeneration and permanent blindness", "Aplastic anemia", "Hepatic lipidosis"],
+            contraCorrect: 0, contraExplain: "Defective ABCG2 efflux causes phototoxic Enrofloxacin accumulation in the feline retina.",
+            interQuestion: "Which fluoroquinolone has a much wider retinal safety margin in cats when higher potency is needed?",
+            interOptions: ["Marbofloxacin or Pradofloxacin", "Ciprofloxacin", "Gentamicin"],
+            interCorrect: 0, interExplain: "Pradofloxacin and marbofloxacin exhibit superior retinal safety in cats."
+          },
+          {
+            name: "Cidofovir 0.5% Ophthalmic", drugClass: "Topical Antiviral", route: "OS", dosageForm: "EYE",
+            routeFull: "Left Eye (Oculus Sinister)",
+            scenario: "Study Prompt: Select the ophthalmic dropper from the tray and place Cidofovir on the left eye (OS) landmark.",
+            rationale: "OS denotes the left eye; Cidofovir is compounded as a 0.5% ophthalmic solution dosed twice daily.",
+            contraindicationSummary: "Contraindicated in known cidofovir hypersensitivity; monitor for nasolacrimal punctal stenosis.",
+            contraQuestion: "What local adverse effect has been reported with topical Cidofovir in cats?",
+            contraOptions: ["Nasolacrimal punctal stenosis (epiphora)", "Lens luxation", "Ototoxicity"],
+            contraCorrect: 0, contraExplain: "Topical cidofovir can cause stenosis of the nasolacrimal drainage system.",
+            interQuestion: "Why is systemic Acyclovir avoided in cats with FHV-1?",
+            interOptions: ["Poor bioavailability and severe bone marrow / renal toxicity in cats", "It causes hyperthyroidism", "It stains teeth"],
+            interCorrect: 0, interExplain: "Famciclovir is the safe systemic antiviral for cats."
+          }
+        ]
+      },
+      horse: {
+        category: "equine",
+        categoryLabel: "Equine Medicine",
+        label: "🐴 Equine (Horse)",
+        modelSrc: "models/horse.glb",
+        fallbackSrcs: ["models/Horse.glb", "horse.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "PO", label: "PO", desc: "Oral (Per Os) — Interdental space paste/drench", pos: "0.00007m 1.41786m 1.12512m", norm: "0.015m -0.653m 0.756m" },
+          { slot: "hotspot-2", route: "IN", label: "IN", desc: "Intranasal — Nasal passages / nasogastric access", pos: "-0.00097m 1.46890m 1.18238m", norm: "-0.035m -0.463m 0.885m" },
+          { slot: "hotspot-3", route: "OD", label: "OD", desc: "Right Eye (Oculus Dexter) — Ophthalmic / subpalpebral lavage", pos: "-0.08476m 1.73709m 1.02641m", norm: "-0.729m -0.371m 0.573m" },
+          { slot: "hotspot-4", route: "OS", label: "OS", desc: "Left Eye (Oculus Sinister) — Ophthalmic drops/ointment", pos: "0.08268m 1.73433m 1.02728m", norm: "0.650m -0.192m 0.734m" },
+          { slot: "hotspot-5", route: "IV", label: "IV (EJV)", desc: "Intravenous — Left External Jugular Vein (upper/mid jugular groove)", pos: "0.04524m 1.44679m 0.65739m", norm: "0.930m -0.145m 0.335m" },
+          { slot: "hotspot-6", route: "IV", label: "IV (EJV)", desc: "Intravenous — Right External Jugular Vein", pos: "-0.04497m 1.44293m 0.65645m", norm: "-0.922m -0.126m 0.365m" },
+          { slot: "hotspot-7", route: "IM", label: "IM", desc: "Intramuscular — Equine Cervical Neck Triangle", pos: "0.09646m 1.52667m 0.58107m", norm: "0.977m 0.076m 0.195m" },
+          { slot: "hotspot-8", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Lateral neck skin fold", pos: "0.09494m 1.60815m 0.51607m", norm: "0.953m 0.191m -0.233m" },
+          { slot: "hotspot-10", route: "IM", label: "IM", desc: "Intramuscular — Right Cervical Neck Triangle", pos: "-0.08906m 1.53449m 0.60847m", norm: "-0.961m 0.046m 0.271m" },
+          { slot: "hotspot-11", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Right lateral neck", pos: "-0.09674m 1.61954m 0.53520m", norm: "-0.960m 0.184m -0.210m" }
+        ],
+        medications: [
+          {
+            name: "Flunixin Meglumine (Banamine)", drugClass: "Equine NSAID", route: "IV", dosageForm: "IV",
+            routeFull: "Intravenous (External Jugular Vein)",
+            scenario: "Study Prompt: Select the IV catheter/syringe from the tray and place Flunixin Meglumine on the external jugular vein landmark.",
+            rationale: "Never inject Flunixin IM in horses due to high risk of fatal Clostridial myonecrosis (gas gangrene); administer strictly IV or PO.",
+            contraindicationSummary: "CONTRAINDICATED via IM injection in horses (Clostridial myonecrosis); avoid intra-carotid injection (immediate seizures) and concurrent NSAIDs.",
+            contraQuestion: "What life-threatening complication is strongly associated with IM Flunixin injection in horses?",
+            contraOptions: ["Fatal Clostridial myonecrosis (gas gangrene)", "Laminitis reversal", "Ototoxicity"],
+            contraCorrect: 0, contraExplain: "Tissue necrosis from IM flunixin allows dormant Clostridium spores to proliferate.",
+            interQuestion: "Combining Flunixin Meglumine with Phenylbutazone ('stacking NSAIDs') increases risk of:",
+            interOptions: ["Right dorsal colitis and renal papillary necrosis", "Hyperglycemia", "Bradycardia"],
+            interCorrect: 0, interExplain: "Dual NSAID therapy causes severe GI mucosal ulceration and renal ischemia in horses."
+          },
+          {
+            name: "Omeprazole Paste (GastroGard)", drugClass: "Proton Pump Inhibitor", route: "PO", dosageForm: "PO",
+            routeFull: "Oral Paste (Interdental Space)",
+            scenario: "Study Prompt: Select the oral paste applicator from the tray and place Omeprazole on the PO landmark.",
+            rationale: "Enteric-coated equine omeprazole paste prevents acid degradation in the stomach and treats EGUS.",
+            contraindicationSummary: "Contraindicated in known omeprazole hypersensitivity; note that oral lincosamides (lincomycin/clindamycin) are fatal in horses.",
+            contraQuestion: "Which antibiotic is strictly CONTRAINDICATED in adult horses due to fatal hindgut dysbiosis?",
+            contraOptions: ["Oral Lincomycin or Clindamycin", "Potassium Penicillin IV", "Gentamicin IV"],
+            contraCorrect: 0, contraExplain: "Lincosamides destroy cellulolytic hindgut flora, causing fatal hemorrhagic colitis in horses.",
+            interQuestion: "Omeprazole elevates gastric pH, which can decrease oral absorption of:",
+            interOptions: ["Ketoconazole / Itraconazole", "IV Fluids", "Topical ophthalmic drops"],
+            interCorrect: 0, interExplain: "Azole antifungals require an acidic gastric environment for dissolution."
+          }
+        ]
+      },
+      cow: {
+        category: "food",
+        categoryLabel: "Food & Production Animals",
+        label: "🐄 Bovine (Cow)",
+        modelSrc: "models/cow.glb",
+        fallbackSrcs: ["models/Cow.glb", "cow.glb"],
+        hotspots: [
+          { slot: "hotspot-2", route: "IN", label: "IN", desc: "Intranasal — Mucosal respiratory vaccination (IBR/PI3/BRSV)", pos: "0.35804m 1.00241m 1.18123m", norm: "0.561m -0.332m 0.757m" },
+          { slot: "hotspot-3", route: "OD", label: "OD", desc: "Right Eye (Oculus Dexter) — Ophthalmic / subconjunctival", pos: "0.15846m 1.20716m 1.06460m", norm: "-0.100m 0.127m 0.986m" },
+          { slot: "hotspot-4", route: "OS", label: "OS", desc: "Left Eye (Oculus Sinister) — Ophthalmic", pos: "0.31533m 1.21030m 0.95021m", norm: "0.985m 0.054m 0.159m" },
+          { slot: "hotspot-5", route: "IMM", label: "IMM (Udder)", desc: "Intramammary — Teat canal infusion (partial insertion after complete milk-out)", pos: "-0.07875m 0.51193m -0.71117m", norm: "-0.425m -0.895m -0.132m" },
+          { slot: "hotspot-7", route: "IV", label: "IV", desc: "Intravenous — Jugular vein (slow infusion for 23% Calcium Borogluconate)", pos: "-0.03728m 1.03257m 0.78043m", norm: "-0.615m -0.440m 0.653m" },
+          { slot: "hotspot-8", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Pre-scapular neck triangle (BQA gold-standard route)", pos: "-0.11458m 1.16828m 0.61542m", norm: "-0.907m 0.222m 0.356m" },
+          { slot: "hotspot-9", route: "IM", label: "IM", desc: "Intramuscular — Cervical neck triangle (never in rump/hip per BQA)", pos: "-0.09781m 1.10097m 0.70246m", norm: "-0.901m 0.212m 0.377m" },
+          { slot: "hotspot-11", route: "IV", label: "IV", desc: "Intravenous — Contralateral Jugular Vein", pos: "0.12815m 1.03969m 0.68323m", norm: "0.902m -0.354m -0.243m" },
+          { slot: "hotspot-12", route: "IM", label: "IM", desc: "Intramuscular — Neck triangle", pos: "0.09390m 1.10598m 0.59873m", norm: "0.795m 0.232m -0.558m" },
+          { slot: "hotspot-13", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Neck triangle", pos: "0.05611m 1.17142m 0.52666m", norm: "0.988m 0.139m -0.059m" },
+          { slot: "hotspot-14", route: "PO", label: "PO", desc: "Oral (Per Os) — Balling gun bolus or oral drench", pos: "0.33666m 0.97320m 1.15209m", norm: "-0.192m -0.962m -0.192m" }
+        ],
+        medications: [
+          {
+            name: "Cephapirin Sodium (ToDAY Intramammary)", drugClass: "1st-Gen Cephalosporin Mastitis Tube", route: "IMM", dosageForm: "IMM",
+            routeFull: "Intramammary (Teat Canal Infusion)",
+            scenario: "Study Prompt: Select the Intramammary (IMM) udder tube from the tray and place it on the IMM landmark.",
+            rationale: "Use partial insertion (2-3 mm) of the sterile cannula tip to avoid damaging the teat sphincter keratin plug.",
+            contraindicationSummary: "Contraindicated in beta-lactam hypersensitivity; strict milk (96 hr) and slaughter (4 day) withdrawal times required; extralabel fluoroquinolones/cephalosporins strictly restricted.",
+            contraQuestion: "Which antibiotic class is strictly PROHIBITED from extralabel use in lactating dairy cattle under federal AMDUCA rules?",
+            contraOptions: ["Fluoroquinolones (e.g., Enrofloxacin) and Glycopeptides", "Penicillin G", "Oxytetracycline"],
+            contraCorrect: 0, contraExplain: "Federal FDA regulations strictly forbid extralabel fluoroquinolones, cephalosporins (unapproved uses), chloramphenicol, and sulfonamides in lactating dairy cattle.",
+            interQuestion: "Why must milk from a treated quarter be withheld from the bulk tank for the full labeled milk-withdrawal period?",
+            interOptions: ["Prevents violative beta-lactam residues in human milk supply", "Increases butterfat", "Prevents mastitis in calves"],
+            interCorrect: 0, interExplain: "Even trace beta-lactam residues trigger severe allergic reactions in humans and ruin dairy starter cultures."
+          },
+          {
+            name: "Tulathromycin (Draxxin)", drugClass: "Triamilide Macrolide Antibiotic", route: "SQ", dosageForm: "SQ",
+            routeFull: "Subcutaneous (Pre-Scapular Neck Triangle)",
+            scenario: "Study Prompt: Select the SQ syringe from the tray and place Tulathromycin on the BQA neck triangle SQ landmark.",
+            rationale: "BQA guidelines mandate SQ administration in the neck triangle to preserve high-value loin and round primal cuts.",
+            contraindicationSummary: "CONTRAINDICATED in female dairy cattle 20 months of age or older (no established milk withdrawal); never inject IV.",
+            contraQuestion: "In which dairy class is Tulathromycin NOT approved for use?",
+            contraOptions: ["Female dairy cattle 20 months of age or older", "Beef steers", "Dairy calves under 2 months"],
+            contraCorrect: 0, contraExplain: "Tulathromycin has no established milk withdrawal in lactating dairy cows >= 20 months old.",
+            interQuestion: "Accidental human self-injection with Tilmicosin (Micotil, a related cattle macrolide) causes:",
+            interOptions: ["Potentially fatal cardiotoxicity (calcium-channel blockade)", "Mild drowsiness", "Hypoglycemia"],
+            interCorrect: 0, interExplain: "Tilmicosin carries a boxed warning for fatal human cardiotoxicity."
+          }
+        ]
+      },
+      sheep: {
+        category: "food",
+        categoryLabel: "Food & Production Animals",
+        label: "🐑 Ovine (Sheep)",
+        modelSrc: "models/sheep.glb",
+        fallbackSrcs: ["models/Sheep.glb", "models/lamb.glb", "sheep.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Axillary space or lateral neck (protects wool & primal cuts)", pos: "0.12988m 0.73451m 0.28087m", norm: "0.513m 0.337m -0.788m" },
+          { slot: "hotspot-2", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Lateral neck", pos: "-0.09729m 0.73131m 0.37019m", norm: "-0.243m 0.667m 0.703m" },
+          { slot: "hotspot-3", route: "IM", label: "IM", desc: "Intramuscular — Cervical neck triangle (avoid leg of lamb)", pos: "0.14567m 0.69363m 0.33228m", norm: "0.439m -0.785m -0.436m" },
+          { slot: "hotspot-5", route: "IM", label: "IM", desc: "Intramuscular — Cervical neck", pos: "-0.08867m 0.69416m 0.41570m", norm: "-0.924m -0.352m -0.147m" },
+          { slot: "hotspot-6", route: "IV", label: "IV", desc: "Intravenous — Jugular vein", pos: "0.14007m 0.65105m 0.38087m", norm: "0.998m 0.039m -0.047m" },
+          { slot: "hotspot-7", route: "IV", label: "IV", desc: "Intravenous — Contralateral Jugular Vein", pos: "-0.06265m 0.66199m 0.44513m", norm: "-0.910m 0.315m 0.268m" },
+          { slot: "hotspot-8", route: "PO", label: "PO", desc: "Oral (Per Os) — Drench gun placed gently over base of tongue", pos: "0.17435m 0.69974m 0.63317m", norm: "0.415m -0.643m 0.642m" }
+        ],
+        medications: [
+          {
+            name: "CD&T Toxoid Vaccine (Clostridium perfringens C & D + Tetanus)", drugClass: "Clostridial Bacterin-Toxoid", route: "SQ", dosageForm: "SQ",
+            routeFull: "Subcutaneous (Lateral Neck / Axillary Space)",
+            scenario: "Study Prompt: Select the SQ syringe from the tray and place CD&T toxoid on the SQ landmark.",
+            rationale: "Administer SQ in the lateral neck or wool-free axillary fold so any injection granuloma does not ruin primal leg/loin cuts.",
+            contraindicationSummary: "Contraindicated in acutely febrile/ill sheep; observe labeled 21-day slaughter withdrawal; never feed copper-rich cattle minerals to sheep.",
+            contraQuestion: "Which trace mineral supplement causes fatal acute hemolytic crisis in sheep?",
+            contraOptions: ["Copper-containing cattle mineral blocks or feed", "Sodium bicarbonate", "Vitamin B1 (Thiamine)"],
+            contraCorrect: 0, contraExplain: "Sheep accumulate hepatic copper rapidly and suffer fatal intravascular hemolysis when fed cattle mineral mixes.",
+            interQuestion: "Why is Thiamine (Vitamin B1) administered alongside Amprolium in ovine coccidiosis outbreaks?",
+            interOptions: ["Amprolium is a thiamine analog that can induce polioencephalomalacia (PEM)", "Increases wool growth", "Prevents bloat"],
+            interCorrect: 0, interExplain: "Excess amprolium blocks thiamine uptake into the CNS, causing cerebrocortical necrosis."
+          }
+        ]
+      },
+      pig: {
+        category: "food",
+        categoryLabel: "Food & Production Animals",
+        label: "🐖 Porcine (Pig)",
+        modelSrc: "models/pig.glb",
+        fallbackSrcs: ["models/Pig.glb", "pig.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "PO", label: "PO", desc: "Oral (Per Os) — Oral dosing pump / medicated water/feed", pos: "0.18508m 0.52340m 0.66776m", norm: "0m 1m 0m" },
+          { slot: "hotspot-2", route: "IM", label: "IM", desc: "Intramuscular — Post-auricular cervical neck behind ear (PQA Plus standard; never in ham)", pos: "0.04975m 0.61915m 0.25344m", norm: "-0.819m 0.426m 0.382m" },
+          { slot: "hotspot-3", route: "IM", label: "IM", desc: "Intramuscular — Right post-auricular neck", pos: "0.30356m 0.61471m 0.26919m", norm: "0.954m 0.020m -0.296m" },
+          { slot: "hotspot-4", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Neck behind ear / flank fold", pos: "0.27313m 0.67728m 0.22826m", norm: "0.781m 0.498m -0.375m" },
+          { slot: "hotspot-5", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Left neck", pos: "0.07416m 0.66906m 0.21942m", norm: "-0.614m 0.748m 0.249m" },
+          { slot: "hotspot-6", route: "IN", label: "IN", desc: "Intranasal — Porcine mucosal vaccine delivery", pos: "0.18602m 0.55577m 0.69644m", norm: "-0.012m -0.086m 0.996m" },
+          { slot: "hotspot-7", route: "OD", label: "OD", desc: "Right Eye (Oculus Dexter)", pos: "0.12073m 0.63588m 0.50471m", norm: "-0.014m 0.536m 0.843m" },
+          { slot: "hotspot-8", route: "OS", label: "OS", desc: "Left Eye (Oculus Sinister)", pos: "0.25743m 0.63488m 0.50112m", norm: "0.861m 0.296m 0.411m" }
+        ],
+        medications: [
+          {
+            name: "Iron Dextran (200 mg/mL)", drugClass: "Parenteral Hematinic", route: "IM", dosageForm: "IM",
+            routeFull: "Intramuscular (Post-Auricular Neck Behind Ear)",
+            scenario: "Study Prompt: Select the IM syringe from the tray and place Iron Dextran on the post-auricular neck IM landmark.",
+            rationale: "PQA Plus mandates IM injection strictly in the neck behind the ear—injecting Iron Dextran into the ham permanently stains pork muscle.",
+            contraindicationSummary: "CONTRAINDICATED in the ham/hindlimb (permanent muscle staining) and in piglets born to Vitamin E/Selenium-deficient sows (acute iron toxicity).",
+            contraQuestion: "Why must Iron Dextran NEVER be injected into the ham/hindlimb of a piglet?",
+            contraOptions: ["Causes permanent rust-colored muscle staining and carcass condemnation", "Causes immediate paralysis", "Causes hypoglycemia"],
+            contraCorrect: 0, contraExplain: "Iron dextran stains skeletal muscle permanently, ruining primal ham cuts.",
+            interQuestion: "Administering Iron Dextran to piglets born to Vitamin E / Selenium-deficient sows risks:",
+            interOptions: ["Acute iron-induced lipid peroxidation and sudden death", "Hypercalcemia", "Gastric ulceration"],
+            interCorrect: 0, interExplain: "Without antioxidant Vitamin E/Se protection, free iron triggers fatal oxidative muscle necrosis."
+          }
+        ]
+      },
+      chicken: {
+        category: "avian",
+        categoryLabel: "Avian & Poultry",
+        label: "🐔 Avian (Chicken)",
+        modelSrc: "models/chicken.glb",
+        fallbackSrcs: ["models/Chicken.glb", "chicken.glb"],
+        hotspots: [
+          { slot: "hotspot-1", route: "PO", label: "PO", desc: "Oral (Per Os) — Direct beak/crop dosing or medicated drinking water", pos: "0.00196m 0.38110m 0.18412m", norm: "0.392m -0.919m 0.032m" },
+          { slot: "hotspot-3", route: "SQ", label: "SQ / SC", desc: "Subcutaneous — Dorsal base of neck or inguinal fold", pos: "-0.00013m 0.38814m 0.08445m", norm: "0.075m 0.694m -0.715m" },
+          { slot: "hotspot-4", route: "IM", label: "IM", desc: "Intramuscular — Caudal Pectoral (Breast) Muscle (avoids avian renal portal system)", pos: "-0.05265m 0.24121m 0.16109m", norm: "-0.672m 0.118m 0.730m" },
+          { slot: "hotspot-5", route: "IM", label: "IM", desc: "Intramuscular — Contralateral Pectoral Muscle", pos: "0.05105m 0.24263m 0.16235m", norm: "0.562m 0.067m 0.823m" },
+          { slot: "hotspot-6", route: "IV", label: "IV", desc: "Intravenous — Basilic (Ulnar) Wing Vein", pos: "-0.09522m 0.24809m 0.05728m", norm: "-0.893m 0.443m 0.071m" },
+          { slot: "hotspot-7", route: "IV", label: "IV", desc: "Intravenous — Contralateral Basilic Wing Vein", pos: "0.09066m 0.24963m 0.07861m", norm: "0.915m 0.401m -0.015m" }
+        ],
+        medications: [
+          {
+            name: "Ceftiofur / Tylosin Injectable", drugClass: "Avian Parenteral Antimicrobial", route: "IM", dosageForm: "IM",
+            routeFull: "Intramuscular (Caudal Pectoral / Breast Muscle)",
+            scenario: "Study Prompt: Select the IM syringe from the tray and place it on the caudal pectoral (breast) muscle landmark.",
+            rationale: "Birds possess a Renal Portal System that shunts venous blood from the hindlimbs directly through the kidneys before systemic circulation, reducing efficacy and increasing nephrotoxicity.",
+            contraindicationSummary: "Avoid hindlimb IM injection (renal portal first-pass clearance); fluoroquinolones and nitroimidazoles are strictly PROHIBITED in U.S. poultry.",
+            contraQuestion: "Why are IM injections in birds administered in the pectoral (breast) muscle rather than the leg?",
+            contraOptions: ["Avoids the avian renal portal system (first-pass renal excretion/nephrotoxicity)", "Leg muscles lack blood supply", "Prevents wing droop"],
+            contraCorrect: 0, contraExplain: "Hindlimb venous drainage passes through the renal portal valve directly to the kidneys.",
+            interQuestion: "Which antimicrobial class is strictly PROHIBITED in poultry (chickens/turkeys) in the United States?",
+            interOptions: ["Fluoroquinolones (e.g., Enrofloxacin)", "Amprolium", "Bacitracin"],
+            interCorrect: 0, interExplain: "FDA withdrew poultry approval for fluoroquinolones due to Campylobacter resistance."
+          }
+        ]
+      }
+    };
+
+    // ================= 2. NAPLEX 210+ DRUG EXPANSION ENGINE PER SPECIES =================
+    const naplexCoreCatalog = [
+      { name: "Amoxicillin / Clavulanate (Clavamox)", drugClass: "Beta-Lactam / Beta-Lactamase Inhibitor", route: "PO", species: ["dog", "cat", "pig", "chicken"], contra: "Contraindicated in penicillin/cephalosporin hypersensitivity; avoid oral penicillins in hindgut fermenters (horses/rabbits).", inter: "Bacteriostatic drugs (tetracyclines/macrolides) may antagonize bactericidal cell-wall activity; probenecid slows renal excretion." },
+      { name: "Ampicillin Sodium", drugClass: "Aminopenicillin Antibiotic", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Contraindicated in beta-lactam allergy; administer IV slowly to avoid phlebitis.", inter: "Aminoglycosides are inactivated if mixed in the same syringe with ampicillin." },
+      { name: "Cefazolin Sodium", drugClass: "1st-Generation Cephalosporin", route: "IV", species: ["dog", "cat", "horse"], contra: "Contraindicated in cephalosporin hypersensitivity; adjust dose in severe renal impairment.", inter: "Concurrent aminoglycosides or loop diuretics increase nephrotoxicity risk." },
+      { name: "Cefovecin (Convenia)", drugClass: "3rd-Generation Long-Acting Cephalosporin", route: "SQ", species: ["dog", "cat"], contra: "Contraindicated in cephalosporin/penicillin allergy; long 14-day half-life prevents rapid drug removal if reaction occurs.", inter: "Highly protein-bound (>98%); may transiently displace NSAIDs or furosemide." },
+      { name: "Ceftiofur Crystalline Free Acid (Excede)", drugClass: "3rd-Generation Cephalosporin", route: "SQ", species: ["horse", "cow", "sheep", "pig"], contra: "Extralabel cephalosporin use in food animals (unapproved dose/frequency/route) is strictly prohibited by FDA.", inter: "Beta-lactamase inhibitors are unnecessary; observe strict species-specific slaughter withdrawal." },
+      { name: "Ceftiofur Sodium (Naxcel)", drugClass: "3rd-Generation Cephalosporin", route: "IM", species: ["dog", "horse", "cow", "sheep", "pig", "chicken"], contra: "Contraindicated in beta-lactam hypersensitivity; poultry use restricted to day-old chicks/poults per FDA label.", inter: "Do not mix in same syringe with aminoglycosides." },
+      { name: "Cefpodoxime Proxetil (Simplicef)", drugClass: "Oral 3rd-Generation Cephalosporin", route: "PO", species: ["dog"], contra: "Contraindicated in cephalosporin allergy; safety in pregnant/breeding dogs not established.", inter: "H2 blockers and proton pump inhibitors reduce oral absorption of cefpodoxime proxetil." },
+      { name: "Cephalexin", drugClass: "Oral 1st-Generation Cephalosporin", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in known cephalosporin allergy; GI upset minimized with food.", inter: "Probenecid decreases renal tubular secretion of cephalexin." },
+      { name: "Penicillin G Procaine", drugClass: "Natural Repository Penicillin", route: "IM", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "NEVER administer IV (procaine causes fatal CNS excitement/cardiac arrest); high residue risk in food animals.", inter: "Bacteriostatic tetracyclines/macrolides antagonize bactericidal penicillin action." },
+      { name: "Penicillin G Potassium", drugClass: "Short-Acting IV Penicillin", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Rapid IV push can cause hyperkalemic cardiac arrest (1.7 mEq K+ per million units).", inter: "Potassium-sparing diuretics and ACE inhibitors increase hyperkalemia risk." },
+      { name: "Marbofloxacin (Zeniquin)", drugClass: "Fluoroquinolone Antibiotic", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in juvenile growing animals (cartilage damage); strictly illegal extralabel in food animals.", inter: "Divalent/trivalent cations (iron, calcium, sucralfate) block oral absorption; inhibits theophylline clearance." },
+      { name: "Pradofloxacin (Veraflox)", drugClass: "3rd-Generation Dual-Target Fluoroquinolone", route: "PO", species: ["cat"], contra: "Not approved for dogs in US (causes bone marrow suppression in dogs); contraindicated in kittens <12 months.", inter: "Separate from antacids/sucralfate by 2 hours." },
+      { name: "Orbifloxacin (Orbax)", drugClass: "Fluoroquinolone Antibiotic", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in growing puppies/kittens; feline retinal toxicity if overdosed.", inter: "Decreases clearance of theophylline and cyclosporine." },
+      { name: "Danofloxacin (Advocin)", drugClass: "Bovine Fluoroquinolone", route: "SQ", species: ["cow"], contra: "Strictly PROHIBITED from extralabel use in food-producing animals; not for lactating dairy cattle.", inter: "Observe labeled slaughter withdrawal; do not combine with bacteriostatic macrolides." },
+      { name: "Oxytetracycline (LA-200)", drugClass: "Long-Acting Tetracycline", route: "SQ", species: ["cow", "sheep", "pig"], contra: "Contraindicated in pregnant animals (tooth/bone discoloration) and renal failure; high tissue irritation IM.", inter: "Chelates calcium, iron, and magnesium; do not dilute with calcium-containing solutions." },
+      { name: "Chlortetracycline", drugClass: "Feed/Water Tetracycline", route: "PO", species: ["cow", "sheep", "pig", "chicken"], contra: "Requires Veterinary Feed Directive (VFD) for feed use; contraindicated in adult horses (fatal colitis).", inter: "High dietary calcium reduces oral chlortetracycline bioavailability." },
+      { name: "Minocycline", drugClass: "Lipophilic Tetracycline", route: "PO", species: ["dog", "cat", "horse"], contra: "Contraindicated in pregnancy and young animals during enamel development.", inter: "Divalent cations (sucralfate, antacids) decrease absorption." },
+      { name: "Gentamicin Sulfate", drugClass: "Aminoglycoside Antibiotic", route: "IV", species: ["dog", "cat", "horse"], contra: "Contraindicated in dehydration, pre-existing renal failure, or ruptured tympanum (ototoxicity).", inter: "Furosemide, NSAIDs, and amphotericin B markedly potentiate aminoglycoside nephrotoxicity." },
+      { name: "Amikacin Sulfate", drugClass: "Broad-Spectrum Aminoglycoside", route: "IM", species: ["dog", "cat", "horse"], contra: "Contraindicated in renal insufficiency and dehydration; ensure patient is well hydrated.", inter: "Synergistic with beta-lactams against Pseudomonas, but never mix in same syringe." },
+      { name: "Clindamycin (Antirobe)", drugClass: "Lincosamide Antibiotic", route: "PO", species: ["dog", "cat", "pig"], contra: "STRICTLY CONTRAINDICATED in horses, rabbits, hamsters, and guinea pigs (fatal pseudomembranous enterocolitis).", inter: "Potentiates neuromuscular blocking agents; erythromycin/chloramphenicol antagonize binding." },
+      { name: "Lincomycin", drugClass: "Lincosamide Antibiotic", route: "IM", species: ["pig", "chicken"], contra: "FATAL in horses, ruminants, and rabbits due to severe clostridial enterotoxemia.", inter: "Kaolin-pectin reduces oral lincomycin absorption." },
+      { name: "Azithromycin", drugClass: "Azalide Macrolide Antibiotic", route: "PO", species: ["dog", "cat", "horse"], contra: "Contraindicated in macrolide hypersensitivity; use cautiously in hepatic impairment.", inter: "Inhibits CYP3A4/P-gp, increasing digoxin and cyclosporine levels." },
+      { name: "Erythromycin", drugClass: "Macrolide Antibiotic / Prokinetic", route: "PO", species: ["dog", "cat", "horse", "cow", "pig", "chicken"], contra: "Causes severe diarrhea in adult horses (used only in foals with Rhodococcus equi).", inter: "Potent CYP3A4 inhibitor; increases theophylline, cisapride, and midazolam concentrations." },
+      { name: "Tylosin (Tylan)", drugClass: "Veterinary Macrolide", route: "PO", species: ["dog", "cat", "cow", "pig", "chicken"], contra: "CONTRAINDICATED in horses (fatal hemorrhagic diarrhea); observe withdrawal in food animals.", inter: "May elevate serum digoxin concentrations." },
+      { name: "Gamithromycin (Zactran)", drugClass: "Bovine Azalide Macrolide", route: "SQ", species: ["cow"], contra: "Not for female dairy cattle >= 20 months old; do not administer IV.", inter: "Observe strict 35-day slaughter withdrawal." },
+      { name: "Tildipirosin (Zuprevo)", drugClass: "16-Membered Ring Macrolide", route: "SQ", species: ["cow", "pig"], contra: "Do not administer IV; not approved for lactating dairy cattle.", inter: "Observe 21-day cattle slaughter withdrawal." },
+      { name: "Florfenicol (Nuflor)", drugClass: "Phenicol Antibiotic", route: "SQ", species: ["cow", "pig"], contra: "Contraindicated in breeding bulls (testicular atrophy) and lactating dairy cattle; never use chloramphenicol in food animals.", inter: "Do not administer concurrently with bactericidal penicillins." },
+      { name: "Metronidazole", drugClass: "Nitroimidazole Anaerobic / Protozoal Agent", route: "PO", dosageForm: "PO", species: ["dog", "cat", "horse"], contra: "Strictly ILLEGAL in food-producing animals (carcinogenic residue); neurotoxicity (vestibular ataxia) at high doses.", inter: "Phenobarbital accelerates metronidazole clearance; cimetidine inhibits clearance." },
+      { name: "Sulfadimethoxine (Albon)", drugClass: "Sulfonamide / Coccidiosis Agent", route: "PO", species: ["dog", "cat", "cow", "chicken"], contra: "Contraindicated in dehydrated patients (crystalluria), KCS (dry eye), and extralabel in lactating dairy cattle.", inter: "Increases risk of hyperkalemia with ACE inhibitors; displaces protein-bound drugs." },
+      { name: "Trimethoprim / Sulfamethoxazole (TMS)", drugClass: "Potentiated Sulfonamide", route: "PO", species: ["dog", "cat", "horse"], contra: "Causes Keratoconjunctivitis Sicca (KCS), immune-mediated polyarthritis (especially Dobermans), and hypothyroidism in dogs.", inter: "Detomidine + IV potentiated sulfonamides can cause fatal cardiac arrhythmias in horses." },
+      { name: "Meloxicam (Metacam)", drugClass: "Oxicam COX-2 Preferential NSAID", route: "SQ", species: ["dog", "cat", "cow", "sheep", "pig"], contra: "Repeated oral doses in cats carry FDA boxed warning for acute renal failure and death; contraindicated with steroids.", inter: "Furosemide and ACE inhibitors heighten nephrotoxicity." },
+      { name: "Robenacoxib (Onsior)", drugClass: "Coxib-Class Feline/Canine NSAID", route: "PO", species: ["dog", "cat"], contra: "Approved for max 3 consecutive days in cats; contraindicated with steroids/other NSAIDs or dehydration.", inter: "ACE inhibitors and diuretics increase renal injury risk." },
+      { name: "Deracoxib (Deramaxx)", drugClass: "Coxib-Class Canine NSAID", route: "PO", species: ["dog"], contra: "Not for use in cats; contraindicated in GI ulcers, bleeding disorders, or concurrent corticosteroids.", inter: "Increases digoxin serum levels; avoid with furosemide." },
+      { name: "Firocoxib (Previcox / Equioxx)", drugClass: "Selective COX-2 Inhibitor", route: "PO", species: ["dog", "horse"], contra: "Not for use in cats or food-producing animals; avoid in dehydrated/hypotensive patients.", inter: "Do not stack with phenylbutazone or flunixin in horses." },
+      { name: "Grapiprant (Galliprant)", drugClass: "EP4 Prostaglandin Receptor Antagonist", route: "PO", species: ["dog"], contra: "Contraindicated in dogs <3.6 kg or <9 months old; lacks antiplatelet/GI-ulcer COX-1 inhibition.", inter: "Avoid concurrent NSAIDs or corticosteroids." },
+      { name: "Phenylbutazone (Bute)", drugClass: "Equine Pyrazolone NSAID", route: "PO", species: ["horse"], contra: "Strictly PROHIBITED in food-producing animals (aplastic anemia in humans); causes right dorsal colitis in horses.", inter: "Displaces warfarin/protein-bound drugs; do not combine with flunixin." },
+      { name: "Ketoprofen", drugClass: "Propionic Acid NSAID", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Contraindicated in GI ulceration, renal failure, or bleeding disorders.", inter: "Concurrent corticosteroids or diuretics increase GI and renal toxicity." },
+      { name: "Prednisone / Prednisolone", drugClass: "Intermediate-Acting Glucocorticoid", route: "PO", species: ["dog", "cat", "horse"], contra: "Cats convert prednisone poorly to active prednisolone—always prescribe PREDNISOLONE in cats! Contraindicated with NSAIDs.", inter: "Phenobarbital induces prednisolone clearance; NSAIDs cause severe GI perforation." },
+      { name: "Dexamethasone Sodium Phosphate", drugClass: "Long-Acting Glucocorticoid", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Induces parturition in late-gestation ruminants; linked to laminitis in predisposed horses; never combine with NSAIDs.", inter: "Potassium-depleting diuretics (furosemide) worsen hypokalemia." },
+      { name: "Triamcinolone Acetonide", drugClass: "Potent Glucocorticoid", route: "IM", species: ["dog", "cat", "horse"], contra: "High risk of inducing equine laminitis if total dose exceeds 18 mg; contraindicated in systemic fungal infections.", inter: "Avoid concurrent NSAIDs and live vaccines." },
+      { name: "Cyclosporine (Atopica)", drugClass: "Calcineurin Inhibitor Immunosuppressant", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in malignancy, FeLV/FIV-positive cats, and renal insufficiency.", inter: "Ketoconazole inhibits CYP3A4/P-gp and intentionally boosts cyclosporine levels (used for dose-sparing)." },
+      { name: "Oclacitinib (Apoquel)", drugClass: "JAK1/JAK3 Inhibitor Antipruritic", route: "PO", species: ["dog"], contra: "Contraindicated in dogs <12 months old, serious infections, or neoplasia.", inter: "Monitor closely if combined with systemic immunosuppressants." },
+      { name: "Lokivetmab (Cytopoint)", drugClass: "Caninized Anti-IL-31 Monoclonal Antibody", route: "SQ", species: ["dog"], contra: "For canine use only (species-specific antibody); contraindicated in hypersensitivity.", inter: "No known CYP450 drug-drug interactions." },
+      { name: "Buprenorphine (Simbadol / Buprenex)", drugClass: "Partial Mu-Opioid Agonist", route: "SQ", species: ["dog", "cat", "horse"], contra: "High-concentration Simbadol (1.8 mg/mL) is labeled SQ once daily in cats; use cautiously in head trauma/respiratory depression.", inter: "CNS depressants potentiate sedation; difficult to reverse with naloxone due to high receptor affinity." },
+      { name: "Butorphanol (Torbugesic)", drugClass: "Kappa-Agonist / Mu-Antagonist Opioid", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Short visceral analgesia (45-90 min); antagonizes full mu-agonists if given concurrently.", inter: "Enhances sedation when combined with detomidine or dexmedetomidine." },
+      { name: "Hydromorphone", drugClass: "Full Mu-Opioid Agonist", route: "IV", species: ["dog", "cat"], contra: "Causes post-anesthetic hyperthermia in cats and emesis/panting in dogs; Schedule II controlled substance.", inter: "Naloxone reverses respiratory depression; potentiates inhalant anesthetics." },
+      { name: "Fentanyl Citrate", drugClass: "Potent Short-Acting Mu-Opioid", route: "IV", species: ["dog", "cat", "horse"], contra: "Schedule II controlled substance; causes respiratory depression and bradycardia.", inter: "Reduces MAC of isoflurane/sevoflurane by up to 50%." },
+      { name: "Tramadol", drugClass: "Weak Mu-Agonist / SNRI", route: "PO", species: ["dog", "cat"], contra: "Dogs produce minimal active O-desmethyltramadol (poor analgesic efficacy in dogs compared to cats); Schedule IV.", inter: "Clomipramine, fluoxetine, or trazodone increase risk of serotonin syndrome." },
+      { name: "Gabapentin", drugClass: "Alpha-2-Delta Calcium Channel Ligand", route: "PO", species: ["dog", "cat", "horse"], contra: "Human liquid gabapentin contains XYLITOL (fatal hypoglycemia/hepatic necrosis in dogs); adjust dose in renal failure.", inter: "Antacids reduce oral gabapentin bioavailability." },
+      { name: "Trazodone", drugClass: "Serotonin Antagonist / Reuptake Inhibitor", route: "PO", species: ["dog", "cat"], contra: "Use cautiously in severe hepatic/cardiac disease; risk of serotonin syndrome.", inter: "Avoid combining with MAOIs (selegiline), SSRIs (fluoxetine), or tramadol." },
+      { name: "Fluoxetine (Reconcile)", drugClass: "Selective Serotonin Reuptake Inhibitor (SSRI)", route: "PO", species: ["dog", "cat"], contra: "Contraindicated with MAOIs (selegiline/amitraz) and seizure history.", inter: "Requires 5-week washout before starting selegiline due to active norfluoxetine metabolite." },
+      { name: "Clomipramine (Clomicalm)", drugClass: "Tricyclic Antidepressant (TCA)", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in glaucoma, urinary retention, cardiac arrhythmias, and concurrent MAOIs.", inter: "Potentially fatal serotonin syndrome with trazodone, tramadol, or fluoxetine." },
+      { name: "Acepromazine", drugClass: "Phenothiazine Tranquilizer", route: "IM", species: ["dog", "cat", "horse"], contra: "Causes penile prolapse/priapism in stallions/geldings; severe hypotension in dehydrated/boxer dogs.", inter: "Potentiates organophosphate toxicity and hypotensive anesthetics." },
+      { name: "Diazepam (Valium)", drugClass: "Benzodiazepine Anticonvulsant", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Repeated oral diazepam in cats causes idiosyncratic fatal hepatic necrosis; adsorbs to PVC IV tubing.", inter: "Cimetidine and omeprazole inhibit hepatic diazepam metabolism." },
+      { name: "Midazolam", drugClass: "Water-Soluble Benzodiazepine", route: "IM", species: ["dog", "cat", "horse", "pig", "chicken"], contra: "Can cause paradoxical excitement if given alone without an opioid/alpha-2 in healthy dogs/cats.", inter: "Ketoconazole and erythromycin inhibit CYP3A4 clearance of midazolam." },
+      { name: "Alfaxalone (Alfaxan)", drugClass: "Neurosteroid Injectable Anesthetic", route: "IV", species: ["dog", "cat"], contra: "Apnea occurs with rapid IV bolus; approved IM in cats in several regions; Schedule IV.", inter: "Premedication markedly reduces required induction dose." },
+      { name: "Ketamine HCl", drugClass: "NMDA Dissociative Anesthetic", route: "IM", species: ["dog", "cat", "horse", "sheep", "pig", "chicken"], contra: "Contraindicated in head trauma (increases ICP), ocular perforation, and renal failure in cats (excreted unchanged in feline urine).", inter: "Always pair with benzodiazepine or alpha-2 agonist to prevent muscle rigidity and seizures." },
+      { name: "Tiletamine / Zolazepam (Telazol)", drugClass: "Dissociative + Benzodiazepine", route: "IM", species: ["dog", "cat", "pig"], contra: "Contraindicated in pancreatic disease, severe cardiac/renal impairment, and breeding animals.", inter: "Prolonged recovery in cats due to slower tiletamine clearance." },
+      { name: "Xylazine", drugClass: "Large-Animal Alpha-2 Agonist", route: "IV", species: ["horse", "cow", "sheep"], contra: "Ruminants are 10x more sensitive than horses (1/10th equine dose!); induces premature parturition in late-pregnant cows.", inter: "Reversed by Yohimbine or Tolazoline." },
+      { name: "Detomidine (Dormosedan)", drugClass: "Equine Alpha-2 Agonist", route: "IV", species: ["horse"], contra: "Contraindicated in severe cardiac disease or shock; sublingual gel must be absorbed transmucosally (not swallowed).", inter: "NEVER give IV potentiated sulfonamides (TMS) to detomidine-sedated horses (fatal arrhythmias)." },
+      { name: "Furosemide (Lasix / Salix)", drugClass: "Loop Diuretic", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Contraindicated in anuria and severe dehydration/electrolyte depletion.", inter: "Causes hypokalemia (potentiates digoxin toxicity) and increases aminoglycoside/NSAID nephrotoxicity." },
+      { name: "Pimobendan (Vetmedin)", drugClass: "Inodilator (Calcium Sensitizer + PDE3 Inhibitor)", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in hypertrophic cardiomyopathy (HCM) with outflow obstruction or aortic stenosis.", inter: "Beta-blockers and calcium-channel blockers blunt positive inotropic effects." },
+      { name: "Enalapril / Benazepril", drugClass: "ACE Inhibitor Vasodilator", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in pregnancy (teratogenic) and acute renal failure/hypovolemia.", inter: "Combined with furosemide + NSAID causes 'Triple Whammy' acute kidney injury." },
+      { name: "Spironolactone", drugClass: "Aldosterone Receptor Antagonist", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in hyperkalemia and Addison's disease; causes facial ulcerative dermatitis in some cats.", inter: "ACE inhibitors increase risk of hyperkalemia." },
+      { name: "Amlodipine", drugClass: "Dihydropyridine Calcium Channel Blocker", route: "PO", species: ["dog", "cat"], contra: "First-line antihypertensive in cats; contraindicated in severe cardiogenic shock or hypotension.", inter: "Additive hypotension with ACE inhibitors and beta-blockers." },
+      { name: "Atenolol", drugClass: "Beta-1 Selective Adrenergic Blocker", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in overt decompensated CHF, AV block, and feline asthma (at high doses).", inter: "Diltiazem + atenolol causes additive bradycardia and AV conduction block." },
+      { name: "Diltiazem", drugClass: "Non-Dihydropyridine Calcium Channel Blocker", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in sick sinus syndrome, high-grade AV block, and severe hypotension.", inter: "Inhibits CYP3A4, increasing cyclosporine and digoxin concentrations." },
+      { name: "Digoxin", drugClass: "Cardiac Glycoside", route: "PO", species: ["dog", "cat", "horse"], contra: "Narrow therapeutic index; contraindicated in ventricular fibrillation and hypertrophic cardiomyopathy.", inter: "Furosemide-induced hypokalemia sensitizes myocardium to digoxin toxicity; ketoconazole/quinidine raise levels." },
+      { name: "Sildenafil (Viagra)", drugClass: "PDE-5 Inhibitor (Pulmonary Hypertension)", route: "PO", species: ["dog"], contra: "Contraindicated with organic nitrates or severe systemic hypotension.", inter: "CYP3A4 inhibitors (ketoconazole) increase sildenafil exposure." },
+      { name: "Phenobarbital", drugClass: "Barbiturate Anticonvulsant", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in severe hepatic dysfunction; monitor trough serum levels (15-45 mcg/mL) and liver enzymes.", inter: "Potent CYP450 inducer in dogs (accelerates clearance of glucocorticoids, zonisamide, lidocaine, digoxin)." },
+      { name: "Potassium Bromide (KBr)", drugClass: "Halide Anticonvulsant", route: "PO", species: ["dog"], contra: "CONTRAINDICATED in cats (causes severe allergic eosinophilic bronchitis/pneumonitis).", inter: "High dietary chloride (salt) accelerates renal bromide excretion, causing breakthrough seizures." },
+      { name: "Levetiracetam (Keppra)", drugClass: "SV2A Modulator Anticonvulsant", route: "PO", species: ["dog", "cat"], contra: "Minimal hepatic metabolism (safe in liver shunts); adjust dose in renal insufficiency.", inter: "Phenobarbital increases levetiracetam clearance in dogs." },
+      { name: "Zonisamide", drugClass: "Sulfonamide Anticonvulsant", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in sulfonamide hypersensitivity; rare hepatopathy/KCS.", inter: "Phenobarbital shortens zonisamide elimination half-life." },
+      { name: "Methimazole (Felimazole / Tapazole)", drugClass: "Thioamide Antithyroid Agent", route: "PO", species: ["cat"], contra: "Contraindicated in hepatic disease, autoimmune disease, or hematologic abnormalities (thrombocytopenia/neutropenia).", inter: "Increases clearance of beta-blockers and digoxin as euthyroidism is restored." },
+      { name: "Levothyroxine (Soloxine)", drugClass: "Synthetic T4 Thyroid Hormone", route: "PO", species: ["dog", "horse"], contra: "Contraindicated in uncorrected adrenal insufficiency (Addison's) or thyrotoxicosis.", inter: "Sucralfate, iron, and calcium block oral levothyroxine absorption." },
+      { name: "Trilostane (Vetoryl)", drugClass: "3-Beta-Hydroxysteroid Dehydrogenase Inhibitor", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in primary hepatic/renal disease and pregnancy; risk of iatrogenic Addisonian crisis.", inter: "Potassium-sparing diuretics and ACE inhibitors increase hyperkalemia risk." },
+      { name: "Insulin Glargine (Lantus) / ProZinc", drugClass: "Long-Acting Basal Insulin", route: "SQ", species: ["dog", "cat"], contra: "Contraindicated during hypoglycemia; use U-40 syringes ONLY with ProZinc/Vetsulin and U-100 syringes with Glargine.", inter: "Glucocorticoids antagonize insulin; beta-blockers mask hypoglycemic tachycardia." },
+      { name: "Famotidine (Pepcid)", drugClass: "H2-Receptor Antagonist", route: "PO", species: ["dog", "cat", "horse"], contra: "Adjust dose in severe renal impairment; rapid IV push in cats can cause hemolysis.", inter: "Unlike cimetidine, famotidine does NOT inhibit hepatic CYP450 enzymes." },
+      { name: "Pantoprazole", drugClass: "Injectable Proton Pump Inhibitor", route: "IV", species: ["dog", "cat", "horse", "cow"], contra: "Contraindicated in PPI hypersensitivity; dilute properly for slow IV administration.", inter: "Reduces oral absorption of ketoconazole and itraconazole." },
+      { name: "Sucralfate (Carafate)", drugClass: "Mucosal Cytoprotective Barrier", route: "PO", species: ["dog", "cat", "horse"], contra: "Requires acidic gastric environment to form viscous paste; causes constipation.", inter: "Binds and blocks absorption of doxycycline, fluoroquinolones, digoxin, and levothyroxine—give 2 hours apart." },
+      { name: "Metoclopramide (Reglan)", drugClass: "D2 Antagonist Antiemetic / Prokinetic", route: "SQ", species: ["dog", "cat", "horse"], contra: "STRICTLY CONTRAINDICATED in mechanical GI obstruction, perforation, or seizure disorders.", inter: "Anticholinergics (atropine) block prokinetic effects; acepromazine increases extrapyramidal tremors." },
+      { name: "Ondansetron (Zofran)", drugClass: "5-HT3 Serotonin Antagonist Antiemetic", route: "IV", species: ["dog", "cat"], contra: "Use cautiously in hepatic impairment and breeds with MDR1 mutation.", inter: "Apomorphine + ondansetron causes severe hypotension." },
+      { name: "Apomorphine", drugClass: "Dopamine Agonist Emetic", route: "OD", dosageForm: "EYE", species: ["dog"], contra: "CONTRAINDICATED in cats (causes CNS excitement, not emesis) and after caustic/petroleum ingestion.", inter: "Maropitant and ondansetron block emetic action." },
+      { name: "Itraconazole (Itrafungol)", drugClass: "Triazole Antifungal", route: "PO", species: ["dog", "cat", "horse", "chicken"], contra: "Contraindicated in hepatic dysfunction and pregnancy (teratogenic); compounded bulk powder is poorly absorbed.", inter: "Requires gastric acid (avoid PPIs); inhibits CYP3A4/P-gp (increases cyclosporine/ivermectin)." },
+      { name: "Fluconazole", drugClass: "Water-Soluble Triazole Antifungal", route: "PO", species: ["dog", "cat", "horse"], contra: "Adjust dose in renal insufficiency; penetrates CNS/eyes/urine well.", inter: "Inhibits CYP2C9/CYP3A4; unlike itraconazole, does NOT require gastric acid for absorption." },
+      { name: "Terbinafine", drugClass: "Allylamine Antifungal", route: "PO", species: ["dog", "cat"], contra: "Contraindicated in severe hepatic or renal disease.", inter: "Minimal CYP3A4 inhibition compared to azoles." },
+      { name: "Amphotericin B", drugClass: "Polyene Systemic Antifungal", route: "IV", species: ["dog", "cat", "horse"], contra: "Highly nephrotoxic; use lipid-complex formulations and pre-hydrate with 0.9% NaCl.", inter: "Aminoglycosides and furosemide worsen nephrotoxicity." },
+      { name: "Milbemycin Oxime (Interceptor)", drugClass: "Macrocyclic Lactone Heartworm Preventive", route: "PO", species: ["dog", "cat"], contra: "Test dogs for microfilariae before starting; high off-label Demodex doses require MDR1 testing.", inter: "Ketoconazole increases systemic exposure." },
+      { name: "Selamectin (Revolution)", drugClass: "Topical Avermectin Endectocide", route: "SQ", species: ["dog", "cat"], contra: "Approved for topical spot-on use (do not inject); safe in MDR1-mutant collies at label doses.", inter: "No major systemic drug interactions." },
+      { name: "Fluralaner (Bravecto)", drugClass: "Isoxazoline Ectoparasiticide", route: "PO", species: ["dog", "cat"], contra: "Use cautiously in dogs/cats with a history of seizures or neurologic disorders.", inter: "Highly protein-bound; compatible with heartworm preventives." },
+      { name: "Afoxolaner (NexGard)", drugClass: "Isoxazoline Flea/Tick Preventive", route: "PO", species: ["dog"], contra: "Not approved for cats; caution in epileptic dogs.", inter: "No known CYP450 interactions." },
+      { name: "Sarolaner (Simparica)", drugClass: "Isoxazoline Ectoparasiticide", route: "PO", species: ["dog", "cat"], contra: "Caution in patients with seizure history; puppies >= 6 months.", inter: "No significant interactions reported." },
+      { name: "Fenbendazole (Panacur)", drugClass: "Benzimidazole Anthelmintic", route: "PO", species: ["dog", "cat", "horse", "cow", "sheep", "pig", "chicken"], contra: "Rare bone marrow suppression in birds/reptiles at excessive doses.", inter: "Safe to combine with pyrantel or praziquantel." },
+      { name: "Pyrantel Pamoate", drugClass: "Tetrahydropyrimidine Dewormer", route: "PO", species: ["dog", "cat", "horse", "pig"], contra: "Contraindicated in severely debilitated animals; poorly absorbed orally (acts locally in GI lumen).", inter: "Antagonized by piperazine (opposite mechanisms on nematode neuromuscular junction)." },
+      { name: "Praziquantel (Droncit)", drugClass: "Cestocidal Anthelmintic", route: "PO", species: ["dog", "cat", "horse", "sheep"], contra: "Injectable form stings SQ/IM; safe in pregnancy.", inter: "Dexamethasone may reduce plasma praziquantel levels." },
+      { name: "Albendazole (Valbazen)", drugClass: "Broad-Spectrum Benzimidazole", route: "PO", species: ["cow", "sheep"], contra: "TERATOGENIC in early pregnancy (do not use in cows/ewes during first 45 days of gestation); bone marrow toxicity in dogs/cats.", inter: "Observe strict meat/milk withdrawal times." },
+      { name: "Levamisole", drugClass: "Imidazothiazole Anthelmintic", route: "PO", species: ["cow", "sheep", "pig"], contra: "Narrow safety margin (cholinergic toxicity); contraindicated in lactating dairy cattle.", inter: "Organophosphates and pyrantel potentiate nicotinic cholinergic toxicity." },
+      { name: "Moxidectin (Quest / ProHeart)", drugClass: "Milbemycin Macrocyclic Lactone", route: "PO", species: ["dog", "horse", "cow", "sheep"], contra: "Quest equine oral gel has a narrow margin of safety in foals/miniature horses (overdose causes coma).", inter: "P-gp inhibitors increase CNS penetration." },
+      { name: "Doramectin (Dectomax)", drugClass: "Avermectin Endectocide", route: "SQ", species: ["cow", "pig"], contra: "Not for lactating dairy cattle; observe 35-day cattle / 24-day swine slaughter withdrawal.", inter: "Do not combine with other macrocyclic lactones." },
+      { name: "Eprinomectin (Eprinex)", drugClass: "Zero-Milk-Withdrawal Avermectin", route: "SQ", species: ["cow"], contra: "Approved for lactating dairy cattle with ZERO milk withdrawal when applied topically per label.", inter: "Observe labeled application guidelines." },
+      { name: "Amprolium (Corid)", drugClass: "Thiamine-Analog Coccidiostat", route: "PO", species: ["cow", "sheep", "pig", "chicken"], contra: "Prolonged high doses induce polioencephalomalacia (cerebrocortical necrosis) by blocking thiamine.", inter: "Do not supplement high-dose thiamine during active coccidiosis treatment unless treating PEM." },
+      { name: "Monensin (Rumensin)", drugClass: "Carboxylic Ionophore", route: "PO", species: ["cow", "chicken"], contra: "STRICTLY FATAL in horses and other equids (myocardial necrosis); requires VFD in certain indications.", inter: "Tiamulin (Denagard) inhibits ionophore metabolism and causes fatal ionophore toxicity in pigs/poultry." },
+      { name: "Lasalocid (Bovatec)", drugClass: "Ionophore Coccidiostat", route: "PO", species: ["cow", "sheep", "chicken"], contra: "TOXIC to horses and dogs; fatal myocardial degeneration if ingested by equids.", inter: "Avoid concurrent chloramphenicol or tiamulin." },
+      { name: "Calcium Borogluconate 23%", drugClass: "Parenteral Electrolyte (Milk Fever)", route: "IV", species: ["cow", "sheep"], contra: "Rapid IV infusion causes fatal ventricular fibrillation/cardiac arrest—auscultate heart continuously during slow IV infusion!", inter: "Contraindicated in digoxin-treated animals." },
+      { name: "Dextrose 50% Solution", drugClass: "Hypertonic Carbohydrate", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Dilute before peripheral IV injection (hyperosmolar phlebitis/tissue sloughing if extravasated).", inter: "Monitor serum potassium (insulin-mediated K+ shift)." },
+      { name: "Oxytocin", drugClass: "Uterotonic / Milk Letdown Hormone", route: "IM", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "CONTRAINDICATED in obstructive dystocia (fetal malposition/closed cervix) — causes uterine rupture!", inter: "Calcium pretreatment enhances uterine responsiveness." },
+      { name: "Dinoprost Tromethamine (Lutalyse)", drugClass: "Prostaglandin F2-Alpha", route: "IM", species: ["horse", "cow", "pig"], contra: "CONTRAINDICATED in pregnant animals unless inducing abortion; causes transient sweating/colic in horses; asthmatics/pregnant women must avoid skin contact.", inter: "NSAIDs block endogenous prostaglandin synthesis." },
+      { name: "Altrenogest (Regu-Mate)", drugClass: "Synthetic Oral Progestin", route: "PO", species: ["horse", "pig"], contra: "Absorbed through human skin (women of childbearing age must wear impermeable gloves); contraindicated in uterine infection.", inter: "Rifampin/phenobarbital may accelerate progestin metabolism." },
+      { name: "Atropine Sulfate", drugClass: "Anticholinergic / Muscarinic Antagonist", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Causes ileus/colic in horses; contraindicated in narrow-angle glaucoma and tachyarrhythmias.", inter: "Antagonizes metoclopramide and bethanechol." },
+      { name: "Epinephrine (1:1000)", drugClass: "Alpha/Beta Adrenergic Agonist", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig", "chicken"], contra: "First-line for anaphylaxis and CPR; avoid intracardiac injection.", inter: "Beta-blockers blunt bronchodilation; halothane/isoflurane sensitize myocardium to arrhythmias." },
+      { name: "Lidocaine 2% (Preservative-Free)", drugClass: "Class IB Antiarrhythmic / Local Anesthetic", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Cats are highly sensitive to lidocaine CNS/cardiac toxicity; NEVER use lidocaine with epinephrine IV!", inter: "Cimetidine and propranolol reduce hepatic lidocaine clearance." },
+      { name: "Naloxone", drugClass: "Pure Opioid Antagonist", route: "IV", species: ["dog", "cat", "horse", "cow", "sheep", "pig"], contra: "Reverses analgesia along with respiratory depression; short half-life may require redosing.", inter: "Precipitates acute withdrawal in opioid-dependent patients." },
+      { name: "Atipamezole (Antisedan)", drugClass: "Alpha-2 Adrenergic Antagonist", route: "IM", species: ["dog", "cat"], contra: "Do NOT administer IV (causes severe hypotension and reflex tachycardia).", inter: "Specifically reverses dexmedetomidine and medetomidine." },
+      { name: "Prednisolone Acetate 1% Ophthalmic", drugClass: "Topical Ophthalmic Corticosteroid", route: "OD", dosageForm: "EYE", species: ["dog", "cat", "horse", "cow"], contra: "STRICTLY CONTRAINDICATED in corneal ulceration (potentiates collagenase melting and corneal perforation—always fluorescein stain first!).", inter: "Delays corneal epithelial healing." },
+      { name: "Ofloxacin 0.3% Ophthalmic", drugClass: "Topical Fluoroquinolone Eye Drop", route: "OS", dosageForm: "EYE", species: ["dog", "cat", "horse"], contra: "Safe for corneal ulcers; avoid touching dropper tip to ocular surface.", inter: "Instill 5 minutes prior to any ophthalmic ointment." },
+      { name: "Tobramycin 0.3% Ophthalmic", drugClass: "Topical Aminoglycoside Eye Drop", route: "OD", dosageForm: "EYE", species: ["dog", "cat", "horse"], contra: "Contraindicated in aminoglycoside hypersensitivity.", inter: "Apply aqueous drops before ointments." },
+      { name: "Cyclosporine 0.2% Ophthalmic (Optimmune)", drugClass: "Topical Lacrimomimetic Immunomodulator", route: "OS", dosageForm: "EYE", species: ["dog"], contra: "Contraindicated in active viral or fungal ocular infections.", inter: "Apply after aqueous eye drops." },
+      { name: "Posaconazole / Orbifloxacin / Mometasone (Posatex)", drugClass: "Otic Antibacterial/Antifungal/Steroid", route: "AS", dosageForm: "OTIC", species: ["dog"], contra: "Verify intact tympanic membrane before instillation; contraindicated in perforated eardrums.", inter: "Clean and dry ear canal prior to starting therapy." },
+      { name: "Rabies Killed Virus Vaccine", drugClass: "Core Viral Vaccine", route: "SQ", species: ["dog", "cat", "horse", "cow", "sheep"], contra: "Administer in right rear limb (distal) in cats per AAFP feline vaccine-site sarcoma guidelines.", inter: "Avoid systemic immunosuppressants around vaccination." },
+      { name: "FVRCP Intranasal Vaccine", drugClass: "Feline Mucosal Respiratory Vaccine", route: "IN", species: ["cat"], contra: "For intranasal/conjunctival mucosal use ONLY—do not inject parenterally.", inter: "Transient mild sneezing may occur 4-7 days post-administration." },
+      { name: "IBR / PI3 / BRSV Intranasal (Inforce 3)", drugClass: "Bovine Mucosal Respiratory Vaccine", route: "IN", species: ["cow"], contra: "Intranasal use ONLY; effective even in young calves with maternal antibodies.", inter: "Safe in pregnant cows and newborn calves." },
+      { name: "Pirlimycin (Pirsue Intramammary)", drugClass: "Lincosamide Mastitis Infusion", route: "IMM", dosageForm: "IMM", species: ["cow"], contra: "For intramammary use in lactating dairy cows ONLY; strict 36-hour milk and 9-day slaughter withdrawal.", inter: "Use partial teat-cannula insertion." },
+      { name: "Ceftiofur Hydrochloride (Spectramast LC)", drugClass: "Cephalosporin Intramammary Tube", route: "IMM", dosageForm: "IMM", species: ["cow"], contra: "Contraindicated in cephalosporin allergy; observe 72-hour milk withdrawal.", inter: "Sanitize teat end with alcohol pad before partial insertion." },
+      { name: "Cloxacillin Benzathine (Dry-Clox)", drugClass: "Dry-Cow Intramammary Penicillin", route: "IMM", dosageForm: "IMM", species: ["cow"], contra: "For DRY COWS ONLY—never use in lactating cows or within 30 days of calving!", inter: "Observe strict 30-day slaughter withdrawal." }
+    ];
+
+    const clinicalProfiles = [
+      { suffix: " — Standard Board Review Regimen", note: "Study Focus: Review species-specific mg/kg dose concepts, renal/hepatic clearance, and owner counseling points." },
+      { suffix: " — Acute / Emergency Exam Scenario", note: "Study Focus: Evaluate rapid onset, hemodynamic stability, and species-specific toxicity thresholds." },
+      { suffix: " — Chronic / Maintenance Study Case", note: "Study Focus: Monitor long-term organ function, therapeutic drug monitoring (TDM), and adherence." }
+    ];
+
+    function inferDosageForm(route) {
+      if (route === "OD" || route === "OS") return "EYE";
+      if (route === "AD" || route === "AS") return "OTIC";
+      if (route === "IMM") return "IMM";
+      return route;
+    }
+
+    function buildFullSpeciesFormulary(speciesKey) {
+      const sp = speciesDatabase[speciesKey];
+      const baseList = [...sp.medications];
+      const existingNames = new Set(baseList.map(m => m.name.toLowerCase()));
+
+      clinicalProfiles.forEach((prof, pIdx) => {
+        naplexCoreCatalog.forEach(item => {
+          const isPrimary = item.species.includes(speciesKey);
+          const fullName = pIdx === 0 ? item.name : `${item.name}${prof.suffix}`;
+          if (existingNames.has(fullName.toLowerCase())) return;
+
+          const validRoutes = sp.hotspots.map(h => h.route);
+          const effectiveRoute = validRoutes.includes(item.route) ? item.route : (validRoutes.includes("PO") ? "PO" : validRoutes[0]);
+          const effectiveForm = inferDosageForm(effectiveRoute);
+          const matchingSpot = sp.hotspots.find(h => h.route === effectiveRoute) || sp.hotspots[0];
+
+          baseList.push({
+            name: fullName,
+            drugClass: item.drugClass + (isPrimary ? "" : " (Cross-Species Comparative)"),
+            route: effectiveRoute,
+            dosageForm: effectiveForm,
+            routeFull: `${effectiveRoute} - ${matchingSpot.desc.split("—")[0].trim()}`,
+            scenario: `Study Prompt: Select the ${effectiveForm} dosage form from the Study Supply Tray and place ${fullName} on the ${sp.label} ${effectiveRoute} anatomical landmark.`,
+            rationale: `${prof.note} ${isPrimary ? "Approved/commonly studied in " + sp.label + "." : "Important cross-species NAPLEX comparative agent."}`,
+            contraindicationSummary: item.contra,
+            contraQuestion: `Which contraindication or species-specific warning applies to ${item.name}?`,
+            contraOptions: [
+              item.contra,
+              "Safe to administer at 10x labeled dose in all species without monitoring",
+              "Requires concurrent IV potassium bolus in every patient"
+            ],
+            contraCorrect: 0,
+            contraExplain: item.contra,
+            interQuestion: `What is the key drug interaction or study precaution for ${item.name}?`,
+            interOptions: [
+              item.inter,
+              "Completely inert with zero drug-drug or food interactions",
+              "Must be mixed directly with sodium bicarbonate in the same syringe"
+            ],
+            interCorrect: 0,
+            interExplain: item.inter
+          });
+          existingNames.add(fullName.toLowerCase());
+        });
+      });
+      return baseList;
+    }
+
+    if (typeof expandedMedications !== "undefined") {
+      Object.keys(expandedMedications).forEach(sp => {
+        if (speciesDatabase[sp] && Array.isArray(expandedMedications[sp]) && expandedMedications[sp].length > 0) {
+          speciesDatabase[sp].medications = expandedMedications[sp].map(m => ({
+            ...m,
+            dosageForm: m.dosageForm || inferDosageForm(m.route),
+            contraindicationSummary: m.contraindicationSummary || m.contraExplain || "Verify species-specific contraindications."
+          }));
+        }
+      });
+    }
+
+    Object.keys(speciesDatabase).forEach(spKey => {
+      speciesDatabase[spKey].medications = buildFullSpeciesFormulary(spKey);
+    });
+
+    // ================= 3. STUDY SUPPLY TRAY ITEMS =================
+    const supplyTrayItems = [
+      { id: "PO", icon: "💊", label: "Oral Meds / Paste" },
+      { id: "SQ", icon: "💉", label: "SQ / SC Syringe" },
+      { id: "IM", icon: "🩺", label: "IM Syringe" },
+      { id: "IV", icon: "💧", label: "IV Catheter / Line" },
+      { id: "EYE", icon: "👁️", label: "Ophthalmic (Eye)" },
+      { id: "OTIC", icon: "👂", label: "Otic (Ear Meds)" },
+      { id: "IN", icon: "👃", label: "Intranasal Tip" },
+      { id: "IMM", icon: "🐄", label: "IMM Udder Tube" }
+    ];
+
+    let appState = {
+      species: "dog",
+      labMode: "tray",
+      caseIdx: 0,
+      selectedTrayForm: null,
+      score: 0,
+      total: 0,
+      answered: false,
+      deckLimit: "all",
+      customSelectedIndices: null,
+      pickerSearch: ""
+    };
+
+    const speciesKeys = Object.keys(speciesDatabase);
+    let showcaseIdx = 0;
+
+    function getActiveStudyDeck() {
+      const allMeds = speciesDatabase[appState.species].medications;
+      if (!isPaidMember()) {
+        // Free Starter Plan: 5 Canine starter drugs
+        return allMeds.slice(0, 5);
+      }
+
+      let pool = appState.customSelectedIndices && appState.customSelectedIndices.length > 0
+        ? appState.customSelectedIndices.map(i => allMeds[i]).filter(Boolean)
+        : allMeds;
+
+      if (appState.deckLimit !== "all") {
+        const limitNum = parseInt(appState.deckLimit, 10);
+        if (!isNaN(limitNum) && limitNum > 0) {
+          pool = pool.slice(0, limitNum);
+        }
+      }
+      return pool.length > 0 ? pool : allMeds;
+    }
+
+    // ================= 4. REVOLVING HERO SHOWCASE =================
+    let showcaseFallbackStep = 0;
+    const heroShowcaseEl = document.getElementById("heroShowcaseViewer");
+
+    heroShowcaseEl.addEventListener("load", () => {
+      heroShowcaseEl.cameraOrbit = "45deg 75deg auto";
+      heroShowcaseEl.fieldOfView = "auto";
+    });
+
+    heroShowcaseEl.addEventListener("error", () => {
+      const key = speciesKeys[showcaseIdx];
+      const fallbacks = speciesDatabase[key].fallbackSrcs || [];
+      if (showcaseFallbackStep < fallbacks.length) {
+        const nextPath = fallbacks[showcaseFallbackStep++];
+        heroShowcaseEl.setAttribute("src", nextPath);
+      }
+    });
+
+    function initHeroShowcase() {
+      const dotsWrap = document.getElementById("showcaseDots");
+      dotsWrap.innerHTML = speciesKeys.map((k, i) =>
+        `<button class="s-dot ${i === 0 ? 'active' : ''}" onclick="setShowcaseSpecies(${i})">${speciesDatabase[k].label.split(' ')[0]} ${k.toUpperCase()}</button>`
+      ).join("");
+
+      setInterval(() => {
+        showcaseIdx = (showcaseIdx + 1) % speciesKeys.length;
+        setShowcaseSpecies(showcaseIdx);
+      }, 4200);
+    }
+
+    function setShowcaseSpecies(idx) {
+      showcaseIdx = idx;
+      showcaseFallbackStep = 0;
+      const key = speciesKeys[idx];
+      const sp = speciesDatabase[key];
+      heroShowcaseEl.setAttribute("src", sp.modelSrc);
+      document.getElementById("showcaseSpeciesTitle").textContent = `${sp.label} • ${sp.categoryLabel}`;
+      document.querySelectorAll(".s-dot").forEach((d, i) => d.classList.toggle("active", i === idx));
+    }
+
+    // ================= 5. NAVIGATION & CATEGORY FILTERING =================
+    function switchView(viewName) {
+      document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active"));
+      document.getElementById("view-" + viewName).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      const navBtn = document.getElementById("nav-" + viewName);
+      if (navBtn) navBtn.classList.add("active");
+      if (viewName === "lab") {
+        checkEducationalAcknowledgment();
+        loadLabSpecies(appState.species);
+      }
+    }
+
+    function openLab(mode, speciesKey) {
+      const targetSpecies = speciesKey || appState.species;
+      if (targetSpecies !== "dog" && !isPaidMember()) {
+        promptUpgradeForLockedFeature(`${speciesDatabase[targetSpecies].label} 3D Study Module`);
+        return;
+      }
+
+      appState.labMode = mode || "tray";
+      appState.species = targetSpecies;
+      document.getElementById("labCategorySelect").value = "all";
+      filterSpeciesByCategory("all", appState.species);
+      switchView("lab");
+      document.querySelectorAll(".lab-tab").forEach(t => t.classList.toggle("active", t.dataset.tab === appState.labMode));
+      renderLabSidebar();
+    }
+
+    function filterSpeciesByCategory(cat, preferredSpecies = null) {
+      const sel = document.getElementById("labSpeciesSelect");
+      const filtered = speciesKeys.filter(k => cat === "all" || speciesDatabase[k].category === cat);
+      sel.innerHTML = filtered.map(k => {
+        const lockText = (k !== "dog" && !isPaidMember()) ? " 🔒 Pro" : ` (${speciesDatabase[k].medications.length})`;
+        return `<option value="${k}">${speciesDatabase[k].label}${lockText}</option>`;
+      }).join("");
+      const nextSp = preferredSpecies && filtered.includes(preferredSpecies) ? preferredSpecies : filtered[0];
+      sel.value = nextSp;
+      loadLabSpecies(nextSp);
+    }
+
+    function setLabMode(mode, btnEl) {
+      appState.labMode = mode;
+      document.querySelectorAll(".lab-tab").forEach(t => t.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      renderLabSidebar();
+    }
+
+    function setDeckLimit(val) {
+      if (!isPaidMember() && val !== "5") {
+        promptUpgradeForLockedFeature("Custom Study Deck Sizes (10 to 210+ Drugs)");
+        renderLabSidebar();
+        return;
+      }
+      appState.deckLimit = val;
+      appState.caseIdx = 0;
+      renderLabSidebar();
+    }
+
+    // ================= 6. 3D MODEL LOADING & CAMERA RESET =================
+    const viewerEl = document.getElementById("mainVetViewer");
+    let mainFallbackStep = 0;
+
+    viewerEl.addEventListener("load", () => {
+      document.getElementById("modelStatusPill").textContent = `${speciesDatabase[appState.species].label} 3D Study Model • Not for Clinical Use`;
+      viewerEl.cameraOrbit = "45deg 75deg auto";
+      viewerEl.fieldOfView = "auto";
+    });
+
+    viewerEl.addEventListener("error", () => {
+      const fallbacks = speciesDatabase[appState.species].fallbackSrcs || [];
+      if (mainFallbackStep < fallbacks.length) {
+        viewerEl.setAttribute("src", fallbacks[mainFallbackStep++]);
+      } else {
+        document.getElementById("modelStatusPill").textContent = `Check models/${appState.species}.glb path`;
+      }
+    });
+
+    function resetViewerCamera() {
+      viewerEl.cameraOrbit = "45deg 75deg auto";
+      viewerEl.fieldOfView = "auto";
+    }
+
+    function loadLabSpecies(speciesKey) {
+      if (speciesKey !== "dog" && !isPaidMember()) {
+        document.getElementById("labSpeciesSelect").value = appState.species;
+        promptUpgradeForLockedFeature(`${speciesDatabase[speciesKey].label} 3D Study Module`);
+        return;
+      }
+
+      appState.species = speciesKey;
+      appState.caseIdx = 0;
+      appState.customSelectedIndices = null;
+      mainFallbackStep = 0;
+
+      const data = speciesDatabase[speciesKey];
+      document.getElementById("modelStatusPill").textContent = `Loading ${data.label} Study Model...`;
+
+      const quickDlBtn = document.getElementById("toolbarQuickDownloadBtn");
+      if (quickDlBtn) {
+        quickDlBtn.textContent = isPaidMember()
+          ? `📥 Download ${data.label.split(' ')[1] || speciesKey.toUpperCase()} Study Guide`
+          : `🔒 Unlock Full Study Guides`;
+      }
+
+      viewerEl.setAttribute("src", data.modelSrc);
+      viewerEl.querySelectorAll(".Hotspot").forEach(el => el.remove());
+
+      data.hotspots.forEach(hs => {
+        const btn = document.createElement("button");
+        btn.className = "Hotspot";
+        btn.setAttribute("slot", hs.slot);
+        btn.setAttribute("data-position", hs.pos);
+        btn.setAttribute("data-normal", hs.norm);
+        btn.setAttribute("data-visibility-attribute", "visible");
+        btn.innerHTML = `<div class="HotspotAnnotation">${hs.label}</div>`;
+        btn.addEventListener("click", () => handle3DHotspotClick(hs, btn));
+        viewerEl.appendChild(btn);
+      });
+
+      renderLabSidebar();
+    }
+
+    function selectSupplyItem(formId) {
+      appState.selectedTrayForm = formId;
+      document.querySelectorAll(".tray-item").forEach(el => el.classList.toggle("selected", el.dataset.form === formId));
+      const statusEl = document.getElementById("selectedSupplyStatus");
+      if (statusEl) {
+        const found = supplyTrayItems.find(i => i.id === formId);
+        statusEl.textContent = `Selected Study Item: ${found.icon} ${found.label} — Now click the matching anatomical pin on the 3D model!`;
+      }
+    }
+
+    function handle3DHotspotClick(hs, btnEl) {
+      const data = speciesDatabase[appState.species];
+      const deck = getActiveStudyDeck();
+      const med = deck[appState.caseIdx % deck.length];
+
+      if (appState.labMode === "explore") {
+        document.getElementById("labSidebar").innerHTML = `
+          <div class="clin-card">
+            <span style="background: #dbeafe; color: #1d4ed8; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">${data.categoryLabel} • Study Landmark</span>
+            <h3 style="margin:8px 0; color:#38bdf8;">${data.label} — Site: ${hs.label}</h3>
+            <p style="font-size:0.95rem; line-height:1.55;">${hs.desc}</p>
+            <button class="btn-hero-gold" style="width:100%; margin-top:14px;" onclick="openLab('tray', '${appState.species}')">Practice Dosage Placement on ${data.label} →</button>
+            <button class="btn-download-quick" style="width:100%; margin-top:8px; padding:10px;" onclick="downloadStudyGuide('${appState.species}', false)">📥 Download ${data.label} Study Guide (.txt)</button>
+          </div>
+        `;
+        return;
+      }
+
+      if (appState.labMode === "tray") {
+        if (!appState.selectedTrayForm) {
+          alert("Step 1: Click the correct dosage form / syringe from the Study Supply Tray first, then click the site pin on the 3D model!");
+          return;
+        }
+        if (appState.answered) return;
+        appState.answered = true;
+        appState.total++;
+
+        const fb = document.getElementById("labFeedback");
+        const formMatch = appState.selectedTrayForm === med.dosageForm;
+        const siteMatch = hs.route === med.route;
+
+        if (formMatch && siteMatch) {
+          appState.score++;
+          btnEl.classList.add("correct");
+          fb.className = "feedback-box show ok";
+          fb.innerHTML = `<strong>✅ Correct Study Selection!</strong><br>Dosage Form: <b>${appState.selectedTrayForm}</b> • Landmark: <b>${med.routeFull}</b><br>${med.rationale}<br><br><strong>⚠️ Board-Prep Contraindication Note:</strong> ${med.contraindicationSummary}`;
+        } else {
+          btnEl.classList.add("wrong");
+          fb.className = "feedback-box show err";
+          fb.innerHTML = `<strong>❌ Study Review Needed:</strong> You chose form <b>${appState.selectedTrayForm}</b> at landmark <b>${hs.label}</b>.<br>Expected Answer: Form <b>${med.dosageForm}</b> at <b>${med.routeFull}</b>.<br>${med.rationale}`;
+        }
+        updateLabScore();
+      }
+    }
+
+    function checkLabMCQ(selectedIdx, correctIdx, explanation, btnEl) {
+      if (appState.answered) return;
+      appState.answered = true;
+      appState.total++;
+
+      const fb = document.getElementById("labFeedback");
+      if (selectedIdx === correctIdx) {
+        appState.score++;
+        btnEl.style.borderColor = "#22c55e";
+        btnEl.style.background = "rgba(22, 163, 74, 0.25)";
+        fb.className = "feedback-box show ok";
+        fb.innerHTML = `<strong>✅ Correct!</strong> ${explanation}`;
+      } else {
+        btnEl.style.borderColor = "#ef4444";
+        btnEl.style.background = "rgba(220, 38, 38, 0.25)";
+        fb.className = "feedback-box show err";
+        fb.innerHTML = `<strong>❌ Incorrect.</strong> ${explanation}`;
+      }
+      updateLabScore();
+    }
+
+    function nextLabCase() {
+      const deck = getActiveStudyDeck();
+      appState.caseIdx = (appState.caseIdx + 1) % deck.length;
+      renderLabSidebar();
+    }
+
+    function prevLabCase() {
+      const deck = getActiveStudyDeck();
+      appState.caseIdx = (appState.caseIdx - 1 + deck.length) % deck.length;
+      renderLabSidebar();
+    }
+
+    function updateLabScore() {
+      document.getElementById("labScore").textContent = appState.score;
+      document.getElementById("labTotal").textContent = appState.total;
+    }
+
+    // ================= 7. CUSTOM MEDICATION PICKER FUNCTIONS =================
+    function toggleDrugInCustomDeck(idx) {
+      if (!isPaidMember()) {
+        promptUpgradeForLockedFeature("Custom Medication Selection");
+        renderDrugPickerList();
+        return;
+      }
+      if (!appState.customSelectedIndices) {
+        appState.customSelectedIndices = [idx];
+      } else {
+        const pos = appState.customSelectedIndices.indexOf(idx);
+        if (pos >= 0) {
+          appState.customSelectedIndices.splice(pos, 1);
+          if (appState.customSelectedIndices.length === 0) appState.customSelectedIndices = null;
+        } else {
+          appState.customSelectedIndices.push(idx);
+        }
+      }
+      appState.caseIdx = 0;
+      renderDrugPickerList();
+    }
+
+    function selectAllDrugsForDeck() {
+      if (!isPaidMember()) {
+        promptUpgradeForLockedFeature("All 210+ Medications per Species");
+        return;
+      }
+      appState.customSelectedIndices = null;
+      appState.caseIdx = 0;
+      renderDrugPickerList();
+    }
+
+    function renderDrugPickerList() {
+      const listEl = document.getElementById("drugPickerListContainer");
+      const countEl = document.getElementById("pickerSelectedCount");
+      if (!listEl) return;
+
+      const allMeds = speciesDatabase[appState.species].medications;
+      const q = (appState.pickerSearch || "").toLowerCase();
+      const paid = isPaidMember();
+      const selectedCount = !paid ? 5 : (appState.customSelectedIndices ? appState.customSelectedIndices.length : allMeds.length);
+
+      if (countEl) {
+        countEl.textContent = paid
+          ? `${selectedCount} selected (of ${allMeds.length} available)`
+          : `Free Starter Plan: 5 of ${allMeds.length} drugs unlocked (Upgrade for full formulary)`;
+      }
+
+      listEl.innerHTML = allMeds
+        .map((m, idx) => ({ m, idx }))
+        .filter(({ m }) => m.name.toLowerCase().includes(q) || m.drugClass.toLowerCase().includes(q) || m.route.toLowerCase().includes(q))
+        .map(({ m, idx }) => {
+          const isFreeSample = idx < 5;
+          const locked = !paid && !isFreeSample;
+          const checked = !paid ? isFreeSample : (!appState.customSelectedIndices || appState.customSelectedIndices.includes(idx));
+          return `
+            <label class="drug-pick-row" style="${locked ? 'opacity:0.65;' : ''}">
+              <input type="checkbox" ${checked ? "checked" : ""} ${locked ? "disabled" : ""} onchange="toggleDrugInCustomDeck(${idx})" />
+              <div style="flex:1;">
+                <strong style="color:#f8fafc;">${m.name} ${locked ? "🔒" : ""}</strong>
+                <div style="font-size:0.74rem; color:#94a3b8;">${m.drugClass} • Route: <span style="color:#38bdf8;">${m.route}</span></div>
+              </div>
+            </label>
+          `;
+        }).join("");
+    }
+
+    function renderDeckHeaderBar(deckLen, totalAvailable) {
+      const paid = isPaidMember();
+      return `
+        <div class="deck-controls">
+          <div>
+            <strong>Study Deck:</strong>
+            <select class="deck-select" onchange="setDeckLimit(this.value)">
+              <option value="5" ${(!paid || appState.deckLimit === "5") ? "selected" : ""}>5 Drugs ${!paid ? "(Free)" : ""}</option>
+              <option value="10" ${paid && appState.deckLimit === "10" ? "selected" : ""}>10 Drugs ${!paid ? "🔒" : ""}</option>
+              <option value="25" ${paid && appState.deckLimit === "25" ? "selected" : ""}>25 Drugs ${!paid ? "🔒" : ""}</option>
+              <option value="50" ${paid && appState.deckLimit === "50" ? "selected" : ""}>50 Drugs ${!paid ? "🔒" : ""}</option>
+              <option value="100" ${paid && appState.deckLimit === "100" ? "selected" : ""}>100 Drugs ${!paid ? "🔒" : ""}</option>
+              <option value="all" ${paid && appState.deckLimit === "all" ? "selected" : ""}>All (${totalAvailable}) ${!paid ? "🔒" : ""}</option>
+            </select>
+          </div>
+          <div style="display: flex; gap:6px; flex-wrap:wrap;">
+            <button class="deck-btn" onclick="setLabMode('picker', document.querySelector('[data-tab=picker]'))">📋 Pick Drugs (${deckLen})</button>
+            <button class="btn-download-quick" style="padding: 5px 9px; font-size:0.76rem;" onclick="downloadStudyGuide('${appState.species}', true)">
+              ${paid ? "📥 Save Deck Guide" : "🔒 Export Guide"}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderLabSidebar() {
+      appState.answered = false;
+      appState.selectedTrayForm = null;
+      document.querySelectorAll(".Hotspot").forEach(b => b.classList.remove("correct", "wrong"));
+
+      const sidebar = document.getElementById("labSidebar");
+      const data = speciesDatabase[appState.species];
+      const deck = getActiveStudyDeck();
+      if (appState.caseIdx >= deck.length) appState.caseIdx = 0;
+      const med = deck[appState.caseIdx];
+      const mode = appState.labMode;
+      const paid = isPaidMember();
+
+      const freeUpgradeBanner = !paid ? `
+        <div style="background:linear-gradient(90deg, #1e3a8a, #0369a1); border:1px solid #38bdf8; border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <div style="font-size:0.78rem; color:#e0f2fe;">
+            <strong>Free Starter Mode:</strong> 5 Canine study cases unlocked. Upgrade to unlock all 7 species &amp; 1,470+ drugs.
+          </div>
+          <button class="btn-hero-gold" style="padding:6px 12px; font-size:0.76rem; white-space:nowrap;" onclick="promptUpgradeForLockedFeature('Full 7-Species Access')">Upgrade</button>
+        </div>
+      ` : "";
+
+      if (mode === "picker") {
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          <div class="clin-card">
+            <span style="background: #dbeafe; color: #1d4ed8; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">Custom Study Session Builder</span>
+            <h3 style="margin:8px 0 4px;">Choose Medications &amp; Practice Count</h3>
+            <p style="font-size:0.83rem; color: #cbd5e1; margin-bottom:10px;">Select how many medications to practice and check off the exact drugs you want to review on the 3D ${data.label} model.</p>
+            <div style="display: flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+              <select class="deck-select" style="flex:1; padding: 8px;" onchange="setDeckLimit(this.value)">
+                <option value="5" ${(!paid || appState.deckLimit === "5") ? "selected" : ""}>Practice 5 Medications</option>
+                <option value="10" ${paid && appState.deckLimit === "10" ? "selected" : ""}>Practice 10 Medications ${!paid ? "🔒" : ""}</option>
+                <option value="25" ${paid && appState.deckLimit === "25" ? "selected" : ""}>Practice 25 Medications ${!paid ? "🔒" : ""}</option>
+                <option value="50" ${paid && appState.deckLimit === "50" ? "selected" : ""}>Practice 50 Medications ${!paid ? "🔒" : ""}</option>
+                <option value="100" ${paid && appState.deckLimit === "100" ? "selected" : ""}>Practice 100 Medications ${!paid ? "🔒" : ""}</option>
+                <option value="all" ${paid && appState.deckLimit === "all" ? "selected" : ""}>Practice All (${data.medications.length}) ${!paid ? "🔒" : ""}</option>
+              </select>
+              <button class="deck-btn" onclick="selectAllDrugsForDeck()">Select All</button>
+            </div>
+            <input type="text" placeholder="Search ${data.medications.length} drugs by name, class, or route (IV, PO, SQ, IM, OD, AD)..."
+              value="${appState.pickerSearch}"
+              oninput="appState.pickerSearch=this.value; renderDrugPickerList();"
+              style="width:100%; padding: 8px 10px; border-radius: 8px; border:1px solid #475569; background:#0f172a; color:#fff; font-size:0.85rem;" />
+            <div id="pickerSelectedCount" style="font-size:0.78rem; color:#38bdf8; font-weight:700; margin-top:8px;"></div>
+            <div class="drug-picker-list" id="drugPickerListContainer"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+              <button class="btn-hero-gold" style="padding:10px; font-size:0.86rem;" onclick="openLab('tray', '${appState.species}')">Practice on 3D Model →</button>
+              <button class="btn-download-quick" style="padding:10px; font-size:0.86rem;" onclick="downloadStudyGuide('${appState.species}', true)">📥 Download Study Deck</button>
+            </div>
+          </div>
+        `;
+        renderDrugPickerList();
+        return;
+      }
+
+      if (mode === "explore") {
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          <div class="clin-card">
+            <span style="background: #dbeafe; color: #1d4ed8; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">${data.categoryLabel} • Study Only</span>
+            <h3 style="margin:8px 0;">${data.label} Anatomical Study Landmarks</h3>
+            <p style="font-size:0.86rem; color: #cbd5e1; margin-bottom:12px;">Rotate the 3D model 360° and click any blue pin to review standard administration landmarks for board exam prep.</p>
+            <div style="display: flex; flex-direction:column; gap:6px; margin-bottom:12px;">
+              ${data.hotspots.map(h => `<div style="background:#0f172a; padding: 8px 10px; border-radius:6px; font-size:0.82rem;"><strong style="color:#38bdf8;">${h.label}:</strong> ${h.desc}</div>`).join("")}
+            </div>
+            <button class="btn-download-quick" style="width:100%; padding:10px;" onclick="downloadStudyGuide('${appState.species}', false)">📥 Download Full ${data.label} Study Guide</button>
+          </div>
+        `;
+        return;
+      }
+
+      if (mode === "tray") {
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          ${renderDeckHeaderBar(deck.length, data.medications.length)}
+          <div class="supply-tray">
+            <div class="tray-title"><span>Step 1: Choose Dosage Form</span><span>Study Supply Tray</span></div>
+            <div class="tray-grid">
+              ${supplyTrayItems.map(item => `
+                <button class="tray-item" data-form="${item.id}" onclick="selectSupplyItem('${item.id}')">
+                  <span class="tray-icon">${item.icon}</span>${item.label}
+                </button>
+              `).join("")}
+            </div>
+            <div id="selectedSupplyStatus" style="margin-top:8px; font-size:0.78rem; color: #fbbf24; font-weight:700;">
+              Click an item above, then click the matching anatomical pin on the 3D ${data.label}.
+            </div>
+          </div>
+
+          <div class="clin-card">
+            <div style="font-size:0.75rem; color:#38bdf8; font-weight:700;">${data.categoryLabel} • ${data.label} • Study Case ${appState.caseIdx + 1} of ${deck.length}</div>
+            <h3 style="font-size:1.2rem; margin: 4px 0;">${med.name}</h3>
+            <div style="font-size:0.84rem; color:#94a3b8; margin-bottom:10px;">${med.drugClass}</div>
+            <div style="background:rgba(245,158,11,0.14); border-left:3px solid #f59e0b; padding:10px; border-radius:6px; font-size:0.88rem;">
+              ${med.scenario}
+            </div>
+            <div class="contra-alert">
+              <strong>⚠️ Board-Prep Contraindication &amp; Safety Note:</strong> ${med.contraindicationSummary}
+            </div>
+          </div>
+
+          <div id="labFeedback" class="feedback-box"></div>
+          <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:8px;">
+            <button class="deck-btn" style="padding:11px;" onclick="prevLabCase()">← Previous</button>
+            <button class="btn-primary" style="padding:11px;" onclick="nextLabCase()">Next Study Case →</button>
+          </div>
+          <button class="btn-download-quick" style="width:100%; padding:10px;" onclick="downloadStudyGuide('${appState.species}', false)">
+            ${paid ? `📥 Download All ${data.medications.length} ${data.label} Drugs as Study Guide` : "🔒 Upgrade to Download Complete 210+ Drug Study Guides"}
+          </button>
+        `;
+        return;
+      }
+
+      if (mode === "contra" || mode === "inter") {
+        const isContra = mode === "contra";
+        const qText = isContra ? med.contraQuestion : med.interQuestion;
+        const opts = isContra ? med.contraOptions : med.interOptions;
+        const corr = isContra ? med.contraCorrect : med.interCorrect;
+        const expl = (isContra ? med.contraExplain : med.interExplain).replace(/'/g, "\\'");
+
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          ${renderDeckHeaderBar(deck.length, data.medications.length)}
+          <div class="clin-card">
+            <span style="background: #dbeafe; color: #1d4ed8; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">
+              ${isContra ? "Contraindication Study Question" : "Drug Interaction Study Question"} • ${appState.caseIdx + 1} of ${deck.length}
+            </span>
+            <h3 style="font-size:1.2rem; margin:8px 0 2px;">${med.name}</h3>
+            <div style="font-size:0.84rem; color:#94a3b8; margin-bottom:12px;">${data.label} • ${med.drugClass} (${med.route})</div>
+            <p style="font-size:0.95rem; font-weight:600; margin-bottom:10px;">${qText}</p>
+            ${opts.map((o, i) => `<button class="opt-btn" onclick="checkLabMCQ(${i}, ${corr}, '${expl}', this)">${o}</button>`).join("")}
+          </div>
+          <div id="labFeedback" class="feedback-box"></div>
+          <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:8px;">
+            <button class="deck-btn" style="padding:11px;" onclick="prevLabCase()">← Previous</button>
+            <button class="btn-primary" style="padding:11px;" onclick="nextLabCase()">Next Question →</button>
+          </div>
+        `;
+        return;
+      }
+
+      if (mode === "compare") {
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          <div class="clin-card">
+            <span style="background: #fef3c7; color:#b45309; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">Cross-Species Pharmacology Study Matrix</span>
+            <h3 style="margin:8px 0;">High-Yield NAPLEX / NAVLE Species Traps</h3>
+            <table class="comp-table">
+              <tr><th>Drug / Class</th><th>Critical Species Differences</th></tr>
+              <tr><td><strong>Flunixin Meglumine</strong></td><td><b>Horse:</b> IV/PO only (IM causes fatal Clostridial myositis).<br><b>Cow:</b> Strictly IV/transdermal (IM causes USDA residue violations).<br><b>Pig:</b> FDA-approved IM in neck.</td></tr>
+              <tr><td><strong>Enrofloxacin</strong></td><td><b>Cat:</b> Max 5 mg/kg/day (higher causes irreversible retinal blindness).<br><b>Cow/Pig/Chicken:</b> Strictly ILLEGAL extralabel under federal AMDUCA rules.</td></tr>
+              <tr><td><strong>Permethrin / Acetaminophen</strong></td><td><b>Dog:</b> Used in veterinary therapy.<br><b>Cat:</b> FATAL (deficient hepatic UDP-glucuronosyltransferase).</td></tr>
+              <tr><td><strong>Lincomycin / Clindamycin</strong></td><td><b>Pig/Dog/Cat:</b> Safe.<br><b>Horse:</b> FATAL hemorrhagic colitis (disrupts hindgut flora).</td></tr>
+              <tr><td><strong>Copper / Selenium</strong></td><td><b>Sheep:</b> Narrowest copper tolerance (cattle mineral blocks cause fatal hemolytic crisis).</td></tr>
+            </table>
+          </div>
+        `;
+        return;
+      }
+
+      if (mode === "guides") {
+        sidebar.innerHTML = `
+          ${freeUpgradeBanner}
+          <div class="clin-card">
+            <span style="background: #fef3c7; color:#b45309; padding:3px 10px; border-radius: 999px; font-size:0.75rem; font-weight:800;">Printable Board-Prep Study Guides</span>
+            <h3 style="margin:8px 0;">Download Printable Study Guides</h3>
+            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom:12px;">Export complete 210+ drug study guides or your active custom deck for <strong>${data.label}</strong> (${deck.length} drugs). <em>For academic study use only.</em></p>
+            <div style="background:#0f172a; border:1.5px solid #38bdf8; border-radius:10px; padding: 12px; margin-bottom:14px;">
+              <div style="font-weight:800; color: #38bdf8; font-size:0.9rem;">Active Study Deck: ${data.label}</div>
+              <div style="font-size:0.78rem; color:#cbd5e1; margin:4px 0 10px;">Exports the ${deck.length} medications in your active deck along with anatomical landmarks, contraindications, and interactions.</div>
+              <button class="btn-hero-gold" style="width:100%; padding: 9px; font-size:0.88rem;" onclick="downloadStudyGuide('${appState.species}', true)">
+                ${paid ? `📥 Download Active Study Deck (${deck.length} Drugs)` : "🔒 Upgrade to Export Custom Study Decks"}
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap:8px;">
+              ${speciesKeys.map(k => `
+                <div style="display: flex; justify-content: space-between; align-items:center; background:#0f172a; padding: 10px 12px; border-radius: 8px; border:1px solid #334155;">
+                  <div>
+                    <strong>${speciesDatabase[k].label}</strong>
+                    <div style="font-size:0.75rem; color:#94a3b8;">${speciesDatabase[k].categoryLabel} • Full ${speciesDatabase[k].medications.length} Drugs</div>
+                  </div>
+                  <button class="btn-download-quick" style="padding:6px 12px; font-size:0.8rem;" onclick="downloadStudyGuide('${k}', false)">
+                    ${paid ? "📥 Full Guide" : "🔒 Full Guide"}
+                  </button>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function downloadStudyGuide(speciesKey, onlyActiveDeck = false) {
+      if (!isPaidMember()) {
+        promptUpgradeForLockedFeature("Printable Study Guide Exports (.txt)");
+        return;
+      }
+
+      const sp = speciesDatabase[speciesKey];
+      const medsToExport = (onlyActiveDeck && speciesKey === appState.species) ? getActiveStudyDeck() : sp.medications;
+      const deckLabel = (onlyActiveDeck && speciesKey === appState.species) ? `CUSTOM STUDY DECK (${medsToExport.length} SELECTED DRUGS)` : `COMPLETE STUDY FORMULARY (${medsToExport.length} DRUGS)`;
+
+      let content = `====================================================================\n`;
+      content += `VETDOSE 3D (vetdose3d.com) — VETERINARY PHARMACY STUDY GUIDE\n`;
+      content += `NOTICE: FOR EDUCATIONAL & EXAM STUDY USE ONLY. NOT FOR CLINICAL USE.\n`;
+      content += `CATEGORY: ${sp.categoryLabel.toUpperCase()} | SPECIES: ${sp.label.toUpperCase()}\n`;
+      content += `SCOPE: ${deckLabel}\n`;
+      content += `====================================================================\n\n`;
+      content += `1. ANATOMICAL STUDY LANDMARKS\n--------------------------------------------------------------------\n`;
+      sp.hotspots.forEach(h => { content += `[${h.label}] ${h.desc}\n`; });
+      content += `\n2. SPECIES PHARMACOLOGY, CONTRAINDICATIONS & INTERACTIONS\n--------------------------------------------------------------------\n`;
+
+      medsToExport.forEach((m, idx) => {
+        content += `\n${idx + 1}. ${m.name} (${m.drugClass})\n`;
+        content += `   Route & Dosage Form: ${m.routeFull} [Tray: ${m.dosageForm}]\n`;
+        content += `   Study Note: ${m.rationale}\n`;
+        content += `   Contraindication: ${m.contraindicationSummary}\n`;
+        content += `   Key Interaction: ${m.interOptions[m.interCorrect]}\n`;
+      });
+
+      const blob = new Blob([content], { type: "text/plain; charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const suffix = (onlyActiveDeck && speciesKey === appState.species) ? `_CustomDeck_${medsToExport.length}Drugs` : `_Full_Study_Guide`;
+      a.download = `VetDose3D_${speciesKey.toUpperCase()}${suffix}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Initialize UI
+    renderAuthHeader();
+    initHeroShowcase();
+  </script>
+</body>
+</html>
